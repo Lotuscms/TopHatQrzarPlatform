@@ -103,6 +103,17 @@ class PlayerMapper(Mapp):
 		else:
 			return False
 
+	def getPlayerByQrcode(self, game, qrcode):
+		
+		if game is None or qrcode is None:
+			return None
+
+		# build the query
+		query = "SELECT * FROM players WHERE game_id = %s AND qrcode=%s"
+		params = (game.getId(), qrcode)
+
+		return self.getOne(query, params)
+
 	def getPlayersInGame(self, game, start=0, number=50):
 		# check func params
 		if start < 0:

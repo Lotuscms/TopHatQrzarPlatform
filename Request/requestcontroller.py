@@ -28,23 +28,24 @@ class RequestController:
 
 		try:
 			request = self.__importRequest(self.uri)
-
-			request.setArg(self.arg)
-			request.setApiKey(self.key)
-
-			if self.opcode is 0:
-				response = request.get()
-			elif self.opcode is 1:
-				response = request.post(self.data)
-			elif self.opcode is 2:
-				response = request.put(self.data)
-			elif self.opcode is 3:
-				response = request.delete()
-
-			self.response = response
-
 		except LookupError as e:
 			raise NotFound("The requested resource does not exist. uri = %s " % self.uri)
+
+		request.setArg(self.arg)
+		request.setApiKey(self.key)
+
+		if self.opcode is 0:
+			response = request.get()
+		elif self.opcode is 1:
+			response = request.post(self.data)
+		elif self.opcode is 2:
+			response = request.put(self.data)
+		elif self.opcode is 3:
+			response = request.delete()
+
+		self.response = response
+
+		
 
 	def __importRequest(self, uri):
 		"""
