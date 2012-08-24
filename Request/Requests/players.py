@@ -62,8 +62,7 @@ class Players(Request):
 
 	@require_login
 	def _doPost(self, dataObject):
-
-		if "name" and "game" and "photo" in dataObject:
+		if "name" and "game" and "qrcode" in dataObject:
 			try:
 				GM = GameMapper()
 
@@ -76,18 +75,16 @@ class Players(Request):
 				else:
 					raise BadRequest("Argument provided for this player type is invalid.")
 
-				print "GAME GOOD "+str(game)
 				PM = PlayerMapper()
 
 				player = Player()
 
 				player.setName(dataObject["name"])
 				player.setGame(game)
-				player.setPhoto(dataObject["photo"])
+				player.setQRCode(dataObject["qrcode"])
 				player.setUser(self.user)
 
 				PM.insert(player)
-				print "PLAYER GOOD "+str(player)
 
 				return self._response(player.dict(3), CODE.CREATED)
 				
