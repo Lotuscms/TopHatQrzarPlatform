@@ -84,7 +84,7 @@ class PlayerMapper(Mapp):
 	def _doUpdate(self, obj):
 		# build the query
 		query = """UPDATE players SET 
-					name = %s, photo = %s, game_id = %s, user_id = %s, lat = %s, lon = %s, score = %s, time = %s 
+					name = %s, photo = %s, game_id = %s, user_id = %s, lat = %s, lon = %s, score = %s, time = %s, alive = %s, qrcode = %s 
 					WHERE id = %s LIMIT 1"""
 		if obj.getAlive() is True:
 			alive = 0

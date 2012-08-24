@@ -1,5 +1,5 @@
 from Request.request import Request
-from Request.requesterrors import NotFound, ServerError, BadRequest
+from Request.requesterrors import NotFound, ServerError, BadRequest, Conflict
 from Networking.statuscodes import StatusCodes as CODE
 
 from Model.kill import Kill
@@ -62,7 +62,7 @@ class Kills(Request):
 
 	@require_login
 	def _doPost(self, dataObject):
-
+		print str(dataObject)
 		if "killer" and "victim_qrcode" and "time" in dataObject:
 			try:
 				KM = KillMapper()
@@ -96,11 +96,18 @@ class Kills(Request):
 				else:
 					raise BadRequest("Arguments provided for this kill are invalid.")
 
+				if killer.getAlive() is False:
+					raise Conflict("You are not alive, therefore you can't tag someone else!")
+
 				kill = Kill()
 
 				kill.setKiller(killer)
 				kill.setVictim(victim)
 				kill.setVerified(False)
+
+				# Even though unverified, let's set that user as dead for now
+				victim.setAlive(False)
+				PM.update(victim)
 
 				kill.setTime(proptime)
 
