@@ -1,5 +1,5 @@
 from Request.request import Request
-from Request.requesterrors import NotFound, ServerError, BadRequest
+from Request.requesterrors import NotFound, ServerError, BadRequest, Conflict
 from Networking.statuscodes import StatusCodes as CODE
 
 from Model.kill import Kill
@@ -62,42 +62,52 @@ class Kills(Request):
 
 	@require_login
 	def _doPost(self, dataObject):
-
-		if "killer" and "victim" and "time" in dataObject:
+		print str(dataObject)
+		if "killer" and "victim_qrcode" and "time" in dataObject:
 			try:
 				KM = KillMapper()
 				GM = GameMapper()
 				PM = PlayerMapper()
 
-				if dataObject["killer"] is not None and dataObject["victim"] is not None:
+				if dataObject["killer"] is not None and dataObject["victim_qrcode"] is not None:
 
-					if "id" in dataObject["killer"] and "id" in dataObject["victim"]:
+					if "id" in dataObject["killer"]:
 						# Get the user by ID
 						killer = PM.find(dataObject["killer"]["id"])
 
-						victim = PM.find(dataObject["victim"]["id"])
+						if killer is None:
+							raise NotFound("Either the victim or the killer were invalid player objects")
+
+						victim = PM.getPlayerByQrcode(killer.getGame(), dataObject["victim_qrcode"])
+
+						if victim is None:
+							raise NotFound("Either the victim or the killer were invalid player objects")
 
 						try:
 							proptime = parseDateTime(dataObject["time"])
 						except:
-							raise BadRequest("""Invalid Time object sent, acceptable formats: 	Acceptable formats are: "YYYY-MM-DD HH:MM:SS.ssssss+HH:MM",
+							raise BadRequest("""Invalid Time object sent, acceptable formats: Acceptable formats are: "YYYY-MM-DD HH:MM:SS.ssssss+HH:MM",
 							"YYYY-MM-DD HH:MM:SS.ssssss",
 							"YYYY-MM-DD HH:MM:SS+HH:MM",
 							"YYYY-MM-DD HH:MM:SS" """)
-
-						if killer is None or victim is None:
-							raise NotFound("Either the victim or the killer were invalid player objects")
 					else:
 						raise BadRequest("Arguments provided for this kill are invalid.")
 
 				else:
 					raise BadRequest("Arguments provided for this kill are invalid.")
 
+				if killer.getAlive() is False:
+					raise Conflict("You are not alive, therefore you can't tag someone else!")
+
 				kill = Kill()
 
 				kill.setKiller(killer)
 				kill.setVictim(victim)
 				kill.setVerified(False)
+
+				# Even though unverified, let's set that user as dead for now
+				victim.setAlive(False)
+				PM.update(victim)
 
 				kill.setTime(proptime)
 
