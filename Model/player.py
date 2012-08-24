@@ -13,7 +13,10 @@ class Player(DomainObject):
 	_lat = 0.0			
 	_lon = 0.0 			
 	_score = 0			
-	_time = datetime.now() 		
+	_time = datetime.now()
+	_qrcode = None
+	_team = None
+	_alive = True 		
 
 	def __init__(self, id_=None):
 		super(Player, self).__init__(id_)
@@ -74,6 +77,18 @@ class Player(DomainObject):
 
 			self._time = time_
 
+	def setAlive(self, alive):
+		if not isinstance(alive, bool):
+			raise DomainException("Alive attr must be a boolean not a %s" % str(type(alive)))
+
+		self._alive = alive
+
+	def setQRCode(self, code):
+		if len(code) is not 6:
+			raise DomainException("That is not a valid QR Code")
+
+		self._qrcode = code
+
 	# Getters #
 	def getName(self):
 		return self._name	
@@ -99,6 +114,15 @@ class Player(DomainObject):
 	def getTime(self):
 		return self._time
 
+	def getAlive(self):
+		return self._alive
+
+	def getQRCode(self):
+		return self._qrcode
+
+	def getTeam(self):
+		return self._qrcode[:1]
+
 	def dict(self, depth=0):
 		# Encountered a weird corrupted game item from DB. Better to log this and then return empty set
 		if self._game is None:
@@ -118,7 +142,10 @@ class Player(DomainObject):
 					"latitude": self.getLat(),
 					"photo": self.getPhoto(),
 					"score": self.getScore(),
-					"time": str(self.getTime())
+					"time": str(self.getTime()),
+					"qrcode": self.getQRCode(),
+					"team": self.getTeam(),
+					"alive": self.getAlive()
 				}
 		else:
 			return super(Player, self).dict(depth-1)

@@ -33,7 +33,7 @@ class PlayerMapper(Mapp):
 		gmapper = GameMapper()
 		game_ = gmapper.find(data["game_id"])
 
-		# If the game is deleted and the player is still linked, then errors can occur
+		# if the game is deleted and the player is still linked, then errors can occur
 		player_.setGame(game_)
 
 		umapper = UserMapper()
@@ -48,17 +48,23 @@ class PlayerMapper(Mapp):
 		player_.setLon(data["lon"])
 		player_.setScore(data["score"])
 		player_.setTime(data["time"])
+		player_.setAlive(bool(data["alive"]))
+		player_.setQRCode(data["qrcode"])
 
 		return player_
 
 	def _doInsert(self, obj):
 		# build query
-		# id, name, photo, game_id, user_id, lat, lon, score, time
-		query = "INSERT INTO players VALUES(NULL, %s, %s, %s, %s, %s, %s, %s, %s)"
+		# id, name, photo, game_id, user_id, lat, lon, score, time, alive, qrcode
+		query = "INSERT INTO players VALUES(NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
 		# convert boolean value to int bool
+		if obj.getAlive() is True:
+			alive = 0
+		else:
+			alive = 1
 		params = (obj.getName(), obj.getPhoto(), obj.getGame().getId(), 
-				obj.getUser().getId(), obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime())
+				obj.getUser().getId(), obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), alive, obj.getQRCode())
 
 		# run the query
 		cursor = self.db.getCursor()
@@ -80,8 +86,12 @@ class PlayerMapper(Mapp):
 		query = """UPDATE players SET 
 					name = %s, photo = %s, game_id = %s, user_id = %s, lat = %s, lon = %s, score = %s, time = %s 
 					WHERE id = %s LIMIT 1"""
-		params = (obj.getName(), obj.getPhoto(), obj.getGame().getId(), 
-				obj.getUser().getId(), obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), obj.getId())
+		if obj.getAlive() is True:
+			alive = 0
+		else:
+			alive = 1
+		params = (obj.getName(), obj.getPhoto(), obj.getGame().getId(), obj.getUser().getId(), 
+				obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), alive, obj.getQRCode(), obj.getId())
 
 		# run the query
 		cursor = self.db.getCursor()
