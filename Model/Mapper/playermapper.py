@@ -60,9 +60,10 @@ class PlayerMapper(Mapp):
 
 		# convert boolean value to int bool
 		if obj.getAlive() is True:
-			alive = 0
-		else:
 			alive = 1
+		else:
+			alive = 0
+
 		params = (obj.getName(), obj.getPhoto(), obj.getGame().getId(), 
 				obj.getUser().getId(), obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), alive, obj.getQRCode())
 
@@ -84,12 +85,14 @@ class PlayerMapper(Mapp):
 	def _doUpdate(self, obj):
 		# build the query
 		query = """UPDATE players SET 
-					name = %s, photo = %s, game_id = %s, user_id = %s, lat = %s, lon = %s, score = %s, time = %s 
+					name = %s, photo = %s, game_id = %s, user_id = %s, lat = %s, lon = %s, score = %s, time = %s, alive = %s, qrcode = %s 
 					WHERE id = %s LIMIT 1"""
+
 		if obj.getAlive() is True:
-			alive = 0
-		else:
 			alive = 1
+		else:
+			alive = 0
+
 		params = (obj.getName(), obj.getPhoto(), obj.getGame().getId(), obj.getUser().getId(), 
 				obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), alive, obj.getQRCode(), obj.getId())
 
@@ -102,6 +105,18 @@ class PlayerMapper(Mapp):
 			return True
 		else:
 			return False
+
+
+	def getPlayerByQrcode(self, game, qrcode):
+		
+		if game is None or qrcode is None:
+			return None
+
+		# build the query
+		query = "SELECT * FROM players WHERE game_id = %s AND qrcode = %s LIMIT 1"
+		params = (game.getId(), qrcode)
+
+		return self.getOne(query, params)
 
 	def getPlayersInGame(self, game, start=0, number=50):
 		# check func params

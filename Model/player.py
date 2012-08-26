@@ -84,7 +84,7 @@ class Player(DomainObject):
 		self._alive = alive
 
 	def setQRCode(self, code):
-		if len(code) not 6:
+		if len(code) is not 6:
 			raise DomainException("That is not a valid QR Code")
 
 		self._qrcode = code

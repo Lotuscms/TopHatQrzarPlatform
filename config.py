@@ -38,10 +38,10 @@ resources = [
 	('/games/', "Games"),
 	('/kills/', "Kills"),
 	('/players/', "Players"),
-	('/gametypes/', "Gametypes")
+	('/alive/', "Alive")
 ]
 from Networking.Protocols.Cherrypy import Protocol
 
 Version='0.1.2'
-GameVersion='0.0.1'
-ServerTitle='TopHat Platform Testing Server'
+GameVersion='0.0.2'
+ServerTitle='TopHat QRzar Testing Server'
