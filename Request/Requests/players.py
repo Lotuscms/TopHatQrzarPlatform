@@ -66,7 +66,7 @@ class Players(Request):
 			try:
 				GM = GameMapper()
 
-				if dataObject["game"] is not None and str(dataObject["game"]).isdigit():
+				if dataObject["game"] is not None:
 					# Get the user by ID
 					game = GM.find(str(dataObject["game"]))
 
