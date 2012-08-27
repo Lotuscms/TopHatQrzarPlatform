@@ -136,7 +136,7 @@ class Player(DomainObject):
 				return {
 					"id": self.getId(),
 					"name": self.getName(),
-					"player_user": self.getUser().dict(depth-1),
+					"user": self.getUser().dict(depth-1),
 					"game": self.getGame().dict(depth-1),
 					"longitude": self.getLon(),
 					"latitude": self.getLat(),

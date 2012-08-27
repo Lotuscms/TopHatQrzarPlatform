@@ -66,12 +66,12 @@ class Players(Request):
 			try:
 				GM = GameMapper()
 
-				if dataObject["game"] is not None:
+				if dataObject["game"] is not None and "id" in dataObject["game"]:
 					# Get the user by ID
-					game = GM.find(str(dataObject["game"]))
+					game = GM.find(dataObject["game"]["id"])
 
 					if game is None:
-						raise NotFound("The specified player type does not exist.")
+						raise NotFound("The specified game does not exist.")
 				else:
 					raise BadRequest("Argument provided for this player type is invalid.")
 
