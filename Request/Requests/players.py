@@ -73,7 +73,7 @@ class Players(Request):
 					if game is None:
 						raise NotFound("The specified game does not exist.")
 				else:
-					raise BadRequest("Argument provided for this player type is invalid.")
+					raise BadRequest("Argument provided for this game type is invalid.")
 
 				PM = PlayerMapper()
 
