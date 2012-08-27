@@ -64,7 +64,7 @@ class PlayerMapper(Mapp):
 		else:
 			alive = 0
 		params = (obj.getName(), obj.getPhoto(), obj.getGame().getId(), 
-				obj.getUser().getId(), obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), alive, obj.getQRCode())
+				obj.getUser().getId(), obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), obj.getQRCode(), alive)
 
 		# run the query
 		cursor = self.db.getCursor()
