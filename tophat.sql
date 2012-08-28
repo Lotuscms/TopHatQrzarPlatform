@@ -73,33 +73,6 @@ INSERT INTO `games` VALUES (1,'Testing Assasin',1,'2012-06-05 12:12:30','2012-08
 UNLOCK TABLES;
 
 --
--- Table structure for table `games_meta`
---
-
-DROP TABLE IF EXISTS `games_meta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `games_meta` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `game_id` mediumint(8) unsigned NOT NULL,
-  `key` char(30) NOT NULL,
-  `value` text,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `key_game_id` (`key`,`game_id`),
-  KEY `game_id` (`game_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `games_meta`
---
-
-LOCK TABLES `games_meta` WRITE;
-/*!40000 ALTER TABLE `games_meta` DISABLE KEYS */;
-/*!40000 ALTER TABLE `games_meta` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `group_perms`
 --
 
@@ -213,7 +186,7 @@ DROP TABLE IF EXISTS `players`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `players` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(60) DEFAULT NULL,
+  `name` varchar(60) NOT NULL,
   `team_id` mediumint(8) unsigned NOT NULL,
   `user_id` mediumint(8) unsigned NOT NULL,
   `lat` float(10,6) DEFAULT NULL,
@@ -239,33 +212,6 @@ LOCK TABLES `players` WRITE;
 /*!40000 ALTER TABLE `players` DISABLE KEYS */;
 INSERT INTO `players` VALUES (1,'specialk',1,1,NULL,NULL,6400,'2012-08-28 14:31:15','WAhrQJ',1),(2,'arboroia',1,2,NULL,NULL,3500,'2012-08-28 14:31:15','PldkJH',1),(3,'specialk [IRL]',3,1,NULL,NULL,100,'2012-08-28 14:31:15','YBhnt4',1),(4,'arboroia is god',3,2,NULL,NULL,2300,'2012-08-28 14:31:15','33KFmG',1),(5,'tester',1,3,NULL,NULL,2800,'2012-08-28 14:31:15','o1wJiY',1),(6,'tester',3,3,NULL,NULL,1700,'2012-08-28 14:31:15','yPeTmc',1),(7,'Meme',1,4,NULL,NULL,32700,'2012-08-28 14:31:15','1qHPFr',1),(8,'MagicMan',2,1,NULL,NULL,4500,'2012-08-28 14:31:15','HESIjN',1),(9,'MagicMan',4,1,NULL,NULL,4500,'2012-08-28 14:31:15','JCcEKo',1),(10,'MagicMan',7,1,NULL,NULL,4500,'2012-08-28 14:31:17','j4K6ya',1),(11,'Goose',2,2,NULL,NULL,4500,'2012-08-28 14:31:42','fdk2Dn',1),(12,'Goose',10,2,NULL,NULL,4500,'2012-08-28 14:31:48','fdR2Dn',1),(13,'Goose',9,2,NULL,NULL,3100,'2012-08-28 14:31:59','G3R2Dn',1),(14,'Black Beanz',8,5,NULL,NULL,3100,'2012-08-28 14:32:09','R3R2Dn',1);
 /*!40000 ALTER TABLE `players` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `players_meta`
---
-
-DROP TABLE IF EXISTS `players_meta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `players_meta` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `player_id` mediumint(8) unsigned NOT NULL,
-  `key` char(30) NOT NULL,
-  `value` text,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `key_player_id` (`player_id`,`key`),
-  KEY `player_id` (`player_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `players_meta`
---
-
-LOCK TABLES `players_meta` WRITE;
-/*!40000 ALTER TABLE `players_meta` DISABLE KEYS */;
-/*!40000 ALTER TABLE `players_meta` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -303,15 +249,14 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(60) NOT NULL,
+  `name` varchar(60) NOT NULL,
   `photo` char(32) DEFAULT NULL,
-  `email` char(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `password` char(69) DEFAULT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `registered` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `password` (`password`)
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -324,34 +269,6 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'Kevin Baker','354d7eff555998e420c54226cb4dc494','banana@tophat.ie','PBKDF2$sha256$100$H7HJ+6gw7qKTZl2j$YYdfGhsybIYSnfbkLVfzEwICWscLKMMh\n','2012-06-05 10:52:57',0),(2,'Kevin Bluett','hfdkjfhakj55998e420c54226cb4dc49','kevin@tophat.ie',NULL,'2012-06-05 10:52:57',0),(3,'Test Subject 1','4aa499b089dff5d89ba44c5281ac883c','ts1@tophat.ie',NULL,'2012-06-05 10:52:57',0),(4,'Testing Subject 2','357843259b856611ebf03f17dfee2d77','ts2@tophat.ie',NULL,'2012-06-05 10:52:57',0),(5,'Bean Stuffie','7adebc519fe505566b07805b50bd3b33','kevinbaker@tophat.ie',NULL,'2012-08-28 14:44:18',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `users_meta`
---
-
-DROP TABLE IF EXISTS `users_meta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users_meta` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` mediumint(8) unsigned NOT NULL,
-  `key` char(30) NOT NULL,
-  `value` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `key_user_id` (`key`,`user_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users_meta`
---
-
-LOCK TABLES `users_meta` WRITE;
-/*!40000 ALTER TABLE `users_meta` DISABLE KEYS */;
-INSERT INTO `users_meta` VALUES (1,1,'alternate','other'),(2,1,'upgrades','[\'lolnade\', \'bomb\', \'claymore\']');
-/*!40000 ALTER TABLE `users_meta` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -362,4 +279,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-08-28 15:52:55
+-- Dump completed on 2012-08-28 23:31:55
