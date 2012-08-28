@@ -8,10 +8,10 @@ def main():
 	TopHatConfig(**kwargs)
 
 	# do the other stuff
-	from Model.Mapper.gamemapper import GameMapper
+	from Model.Mapper.qrzargamemapper import QRzarGameMapper
 	from Model.Mapper.usermapper import UserMapper
 	from Model.Mapper.killmapper import KillMapper
-	from Model.Mapper.playermapper import PlayerMapper
+	from Model.Mapper.qrzarplayermapper import QRzarPlayerMapper
 	from Model.Mapper.apitokenmapper import ApitokenMapper
 	from Model.Mapper.objectwatcher import ObjectWatcher
 
@@ -21,22 +21,22 @@ def main():
 	for usr in users:
 		print usr
 
+	GM = QRzarGameMapper()
+	games = GM.findAll()
+	for game_ in games:
+		print game_
+
 	KM = KillMapper()
 	kills = KM.findAll()
 
 	for kill_ in kills:
 		print kill_
 
-	PM = PlayerMapper()
+	PM = QRzarPlayerMapper()
 	players = PM.findAll()
 
 	for player_ in players:
 		print player_
-
-	GM = GameMapper()
-	games = GM.findAll()
-	for game_ in games:
-		print game_
 
 	ATM = ApitokenMapper()
 	tokens = ATM.findAll()

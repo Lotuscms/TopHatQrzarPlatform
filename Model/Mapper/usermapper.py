@@ -11,15 +11,6 @@ class UserMapper(Mapp):
 	def tableName(self):
 		return "users"
 
-	def _selectStmt(self):
-		return "SELECT * FROM users WHERE id = %s LIMIT 1"
-
-	def _selectAllStmt(self):
-		return "SELECT * FROM users LIMIT %s, %s"
-
-	def _deleteStmt(self, obj):
-		return "DELETE FROM users WHERE id = %s LIMIT 1"	
-
 	def _doCreateObject(self, data):
 		"""Specifics required to build a User object given persistent storage data"""
 		from Model.user import User

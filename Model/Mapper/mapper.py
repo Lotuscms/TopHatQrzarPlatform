@@ -47,7 +47,7 @@ class Mapp:
 			return old
 
 		# gonna have to load object off the disk (database server)
-		query = self._selectStmt()
+		query = "SELECT * FROM " + self.tableName() + " WHERE id = %s LIMIT 1"
 		parameters = (id_,)
 
 		return self.getOne(query, parameters)
@@ -94,7 +94,7 @@ class Mapp:
 	def findAll(self, start=0, number=50):
 		"""Finds all the objects in such a table from start to (start + number)"""
 		# build the query
-		query = self._selectAllStmt()
+		query = "SELECT * FROM " + self.tableName() + " LIMIT %s, %s"
 
 		# run
 		return self._findMany(query, start, number)
@@ -119,7 +119,7 @@ class Mapp:
 
 		print "Deleting " + str(type(obj)) + " object " + str(obj.getId())
 
-		query = self._deleteStmt(obj)
+		query = "DELETE FROM " + self.tableName() + " WHERE id = %s LIMIT 1"
 		params = (obj.getId(),)
 
 		return self.__executeOperation(query, params)		
@@ -225,18 +225,6 @@ class Mapp:
 
 	@abc.abstractmethod
 	def tableName(self):
-		pass
-
-	@abc.abstractmethod
-	def _selectStmt(self):
-		pass
-
-	@abc.abstractmethod 
-	def _selectAllStmt(self):
-		pass
-
-	@abc.abstractmethod 
-	def _deleteStmt(self, obj):
 		pass
 
 	@abc.abstractmethod 

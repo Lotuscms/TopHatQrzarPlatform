@@ -1,6 +1,6 @@
 import time
 from mapper import Mapp
-from playermapper import PlayerMapper
+from qrzarplayermapper import QRzarPlayerMapper
 from gamemapper import GameMapper
 
 class KillMapper(Mapp):
@@ -14,21 +14,12 @@ class KillMapper(Mapp):
 	def tableName(self):
 		return "kills"
 
-	def _selectStmt(self):
-		return "SELECT * FROM kills WHERE id = %s LIMIT 1"
-
-	def _selectAllStmt(self):
-		return "SELECT * FROM kills LIMIT %s, %s"
-
-	def _deleteStmt(self, obj):
-		return "DELETE FROM kills WHERE id = %s LIMIT 1"	
-
 	def _doCreateObject(self, data):
 		"""Builds the kill object using the raw data provided from the database"""
 		from Model.kill import Kill
 		kill_ = Kill(data["id"])
 
-		pmapper = PlayerMapper()
+		pmapper = QRzarPlayerMapper()
 		killer = pmapper.find(data["killer_player_id"])
 		victim = pmapper.find(data["victim_player_id"])
 

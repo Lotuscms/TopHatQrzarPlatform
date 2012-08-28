@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from sets import Set
 from Model.Mapper.objectwatcher import ObjectWatcher as OW
 from Model.domainexception import DomainException
 
@@ -7,6 +8,7 @@ class DomainObject(object):
 	__metaclass__ = ABCMeta
 
 	_id = -1				# setup deafult id outside db storage range
+	_attr = []				# List of attributes
 
 	def __init__(self, id_=None):
 		# check valid id value (pos int)
@@ -46,6 +48,10 @@ class DomainObject(object):
 			raise DomainException("The id must be greater than one")
 
 		self._id = value
+
+	def _notifyAccess(self):
+		"""Can be overridden by child classes to provide lazy load for DomainObjects"""
+		pass
 
 	@abstractmethod		
 	def dict(self, depth=0):
