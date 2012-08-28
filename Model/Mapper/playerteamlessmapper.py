@@ -6,7 +6,7 @@ class PlayerTeamlessMapper(PlayerMapper):
 	__metaclass__ = ABCMeta
 
 	def __init__(self):
-		super(PlayerTeamMapper, self).__init__()
+		super(PlayerTeamlessMapper, self).__init__()
 
 	def getPlayersInGame(self, game, start=0, number=50):
 		# check func params

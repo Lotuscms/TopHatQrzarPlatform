@@ -7,4 +7,4 @@ class QRzarGame(TeamGame):
 		super(QRzarGame, self).__init__(id_)
 
 	def dict(self, depth=0):
-		return super(QRzarGame, self).dict(depth-1)
+		return super(QRzarGame, self).dict(depth)

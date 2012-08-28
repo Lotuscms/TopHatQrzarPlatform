@@ -14,11 +14,14 @@ def main():
 	game = qmapper.find(1)
 
 	print game
-
+	print game.__dict__
+	
 	games = qmapper.findAll()
 	if games:
 		for x in games:
 			print x
+
+
 
 if __name__ == "__main__":
     main()
