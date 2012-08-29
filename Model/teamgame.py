@@ -13,9 +13,14 @@ class TeamGame(Game):
 
 	def getTeams(self):
 		# check have we gotten the list already
-		if self.teams is None:
+		if self._teams is None:
 			from Model.Mapper.teammapper import TeamMapper
 			TM = TeamMapper()
-			self._players = TM.getByGame(self)
+			self._teams = TM.getByGame(self)
 
-		return self._players
+		return self._teams
+
+	def dict(self):
+		self.getTeams()		# hit lazy load
+
+		super(TeamGame, self).dict()

@@ -5,6 +5,8 @@ from Model.Mapper.collection import Collection
 
 class Depth:
 
+	
+
 	@staticmethod
 	def build(obj, depth=0):
 		if not isinstance(obj, DomainObject):
@@ -13,24 +15,23 @@ class Depth:
 		if depth < 0:
 			return { "id": obj.getId() }									# on low depth just return the id not the full object
 
-		# 
+		hide = ["password", "email"]
+
 		obj.dict()	
 
 		# for all the attributes in the object build them out
 		dic = {}
 		for attr, value in obj.__dict__.items():
+			if attr in hide:
+				continue
+
 			# remove leading _ if it exists
 			if attr[:1] == "_":
 				attr = attr[1:]
 
 			# see if value is special circumstance
-			if isinstance(value, Collection):
-				print "=========="
-				print "ATTR: " + attr
-				print "VALUE: " + str(value) + " :: " + str(type(value))	
-																			# Collection
+			if isinstance(value, Collection):								# Collection
 				dic[attr] = Depth._buildList(value.list(), depth-1)			# gets a list version of the collection then builds the list's dictionaries
-				print dic[attr]
 
 			elif isinstance(value, list):									# List
 				dic[attr] = Depth._buildList(value, depth-1)				# builds a list of fleshed out objects not object references

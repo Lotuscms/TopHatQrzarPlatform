@@ -79,4 +79,4 @@ class TeamMapper(Mapp):
 		query = "SELECT * FROM teams WHERE game_id = %s LIMIT %s, %s"
 		params = (game.getId(), start, start+number)
 
-		return deferredcollection.DeferredCollection(self, query, params)
+		return DeferredCollection(self, query, params)

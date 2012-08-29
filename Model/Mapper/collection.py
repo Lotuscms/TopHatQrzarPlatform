@@ -110,6 +110,6 @@ class Collection(object):
 
 		# we need to build some objects - easiest by iterating over them all to build them
 		for obj in self:
-			print "PRINT: " + str(obj)
+			pass
 
 		return self._objects

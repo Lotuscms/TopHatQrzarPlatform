@@ -122,3 +122,5 @@ class User(DomainObject):
 
 	def dict(self):
 		self.getGames()
+
+		super(User, self).dict()

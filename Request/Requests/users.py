@@ -5,6 +5,7 @@ from Model.authentication import require_login, require_super_user
 from Common.apikeygen import getKey
 from Common.utils import checkEmail
 
+from Model.depth import Depth
 from Model.Mapper.usermapper import UserMapper
 from Model.Mapper.apitokenmapper import ApitokenMapper
 from Model.user import User
@@ -40,7 +41,7 @@ class Users(Request):
 					raise NotFound("This user does not exist")
 
 				if self.user.accessLevel("super_user") or self.user.getId() == user.getId():
-					return self._response(user.dict(2), CODE.OK)
+					return self._response(Depth.build(user, 2), CODE.OK)
 				else:
 					raise Forbidden()
 
@@ -50,11 +51,10 @@ class Users(Request):
 					users = UM.findAll(offset, offset+50)
 
 					userslist = []
-
 					for user in users:
-						userslist.append(user.dict(2))
+						userslist.append(Depth.build(user, 2))
 
-					userslist = {"users":userslist, "pagination_offset":offset, "max_perpage": 50}
+					userslist = {"users": userslist, "pagination_offset":offset, "max_perpage": 50}
 
 					return self._response(userslist, CODE.OK)
 				else:
@@ -102,7 +102,7 @@ class Users(Request):
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to save apitoken in the database (%s)" % e.args[1])
 
-			return self._response(token.dict(2), CODE.CREATED)	
+			return self._response(Depth.build(token, 2), CODE.CREATED)	
 		else:
 			raise BadRequest("Required params email and password not sent")
 

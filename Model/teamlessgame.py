@@ -19,3 +19,8 @@ class TeamlessGame(Game):
 			self._players = PM.getPlayersInGame(self)
 
 		return self._players
+
+	def dict(self):
+		self.getPlayers()
+
+		super(TeamlessGame, self).dict()

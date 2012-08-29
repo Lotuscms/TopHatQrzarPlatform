@@ -1,15 +1,12 @@
 from Request.request import Request
-<<<<<<< HEAD
-from Request.requesterrors import NotFound, ServerError, BadRequest
-=======
 from Request.requesterrors import NotFound, ServerError, BadRequest, Conflict
->>>>>>> 88fde6f1e1d84ce20fc4d43641100d964b2e6915
 from Networking.statuscodes import StatusCodes as CODE
 
+from Model.depth import Depth
 from Model.kill import Kill
 from Model.Mapper.killmapper import KillMapper
-from Model.Mapper.gamemapper import GameMapper
-from Model.Mapper.playermapper import PlayerMapper
+from Model.Mapper.qrzargamemapper import QRzarGameMapper
+from Model.Mapper.qrzarplayermapper import QRzarPlayerMapper
 from Common.utils import parseDateTime
 import MySQLdb as mdb
 
@@ -41,21 +38,19 @@ class Kills(Request):
 					raise BadRequest("Kill must be requested by ID")
 
 				if kill is not None:
-					return self._response(kill.dict(), CODE.OK)
+					return self._response(Depth.build(kill, 0), CODE.OK)
 				else:
 					raise NotFound("This kill does not exist")
 			
 			else:
-
 				offset = 0
 				kills = KM.findAll(offset, offset+50)
 
 				killslist = []
-
 				for kill in kills:
-					killslist.append(kill.dict())
+					killslist.append(Depth.build(kill, 2))
 
-				killdict = {"kills":killslist, "pagination_offset":offset, "max_perpage": 50}
+				killdict = {"kills":killslist(), "pagination_offset":offset, "max_perpage": 50}
 
 				return self._response(killdict, CODE.OK)
 
@@ -70,8 +65,7 @@ class Kills(Request):
 		if "killer" and "victim_qrcode" and "time" in dataObject:
 			try:
 				KM = KillMapper()
-				GM = GameMapper()
-				PM = PlayerMapper()
+				PM = QRzarPlayerMapper()
 
 				if dataObject["killer"] is not None and dataObject["victim"] is not None:
 
