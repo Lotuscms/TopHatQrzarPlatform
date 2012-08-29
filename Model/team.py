@@ -29,6 +29,3 @@ class Team(DomainObject):
 			raise DomainException("Teams can only be part of team games not %s" % str(type(game)))
 
 		self._game = game
-
-	def dict(self, depth=0):
-		super(Team, self).dict(depth)

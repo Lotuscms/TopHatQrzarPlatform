@@ -24,4 +24,4 @@ class TeamlessGameMapper(GameMapper):
 					WHERE u.id = %s LIMIT %s, %s"""
 		params = (user.getId(), start, start+number)
 
-		return deferredcollection.DeferredCollection(self, query, params)
+		return DeferredCollection(self, query, params)

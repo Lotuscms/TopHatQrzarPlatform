@@ -10,8 +10,8 @@ class Game(DomainObject):
 	_name = "Unnamed Game"		# public name of the game 
 	_creator = None 			# user who created the game
 	_time = None
-	_startTime = None
-	_endTime = None
+	_start_time = None
+	_end_time = None
 
 	def __init__(self, id_=None):
 		super(Game, self).__init__(id_)
@@ -29,10 +29,10 @@ class Game(DomainObject):
 		return self._time
 
 	def getStartTime(self):
-		return self._startTime
+		return self._start_time
 
 	def getEndTime(self):
-		return self._endTime
+		return self._end_time
 
 	def setName(self, name):
 		if len(name) > 255:
@@ -58,29 +58,21 @@ class Game(DomainObject):
 		if type(time) is not datetime and time is not None:
 			raise DomainException("The start time must be either empty or a datetime object not %s" % str(type(time)))
 
-		self._startTime = time
+		self._start_time = time
 
 	def setEndTime(self, time):
 		if type(time) is not datetime and time is not None:
 			raise DomainException("The end time must be either empty or a datetime object not %s" % str(type(time)))
 
-		self._endTime = time
+		self._end_time = time
 
-	def dict(self, depth=0):
-		if depth < 0:
-			return { "id": self.getId() }
+	def isStarted(self):
+		if self.getStartTime() > datetime.now():
+			self.started = True
 		else:
-			if self.getStartTime() > datetime.now():
-				started = True
-			else:
-				started = False
+			self.started = False
 
-			return {
-				"id": self.getId(),
-				"name": self.getName(),
-				"time": str(self.getTime()),
-				"creator": self.getCreator().dict(depth-1),
-				"start_time": str(self.getStartTime()),
-				"end_time": str(self.getEndTime()),
-				"started": started
-			}
+		return self.started
+
+	def dict(self):
+		self.isStarted()

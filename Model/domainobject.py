@@ -47,9 +47,8 @@ class DomainObject(object):
 
 		self._id = value
 
-	@abstractmethod		
-	def dict(self, depth=0):
-		return {"id": self.getId()}
+	def dict(self):
+		pass
 
 	# Object Watcher Functions #
 	def __markDirty(self):

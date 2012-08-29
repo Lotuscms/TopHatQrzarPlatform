@@ -70,17 +70,3 @@ class Kill(DomainObject):
 
 	def getTime(self):
 		return self._time
-
-	def dict(self, depth=0):
-		if depth < 0:
-			return { "id": self.getId() }
-		else:
-			rdata = {
-				"id": self.getId(),
-				"verified": self.getVerified(),
-				"time": str(self.getTime()),
-				"victim": self.getVictim().dict(depth-1),
-				"killer": self.getKiller().dict(depth-1),
-			}
-
-			return rdata

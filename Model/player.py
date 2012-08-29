@@ -70,18 +70,3 @@ class Player(DomainObject):
 
 	def getAlive(self):
 		return self._alive
-
-	def dict(self, depth=0):
-		# User may have been deleted, ensure crash does not occur.
-		if depth < 0:
-			return { "id": self.getId() }
-		else:
-			return {
-				"id": self.getId(),
-				"name": self.getName(),
-				"player_user": self.getUser().dict(depth-1),
-				"photo": self.getPhoto(),
-				"score": self.getScore(),
-				"time": str(self.getTime()),
-				"alive": self.getAlive()
-			}

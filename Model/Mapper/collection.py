@@ -22,6 +22,7 @@ class Collection(object):
 
 	def __iter__(self):
 		"""Makes the class iterable"""
+		# returns copy as opposed to self to stop issues where editing the collection while iterating over creates infinite loop
 		return copy.copy(self)
 
 	def __contains__(self, v):
@@ -68,7 +69,7 @@ class Collection(object):
 		self._notifyAccess()
 
 		# test if row is outside range
-		if row < 0 or row >= self._total:
+		if row < 0 or row >= len(self):
 			return None
 
 		# check if it exists in a list of already made objects
@@ -77,7 +78,7 @@ class Collection(object):
 
 		# if not empty create and return the object made from that data
 		if self._raw[row] is not None:
-			self._objects.insert(row, self._mapper.createObject(self._raw[row]))
+			self._objects.insert(row, self._mapper.createObject(self._raw[row]))			# build the object
 			return self._objects[row]
 		else:
 			return None
@@ -90,7 +91,7 @@ class Collection(object):
 			self.rewind()				# reset the pointer so we can iterate over this collection again	
 			raise StopIteration			# tells the iterator that we are done and to stop iterating
 		else:
-			self._pointer += 1			# increment counter
+			self._pointer += 1
 			return row
 
 	def _notifyAccess(self):
@@ -101,6 +102,14 @@ class Collection(object):
 		"""Brings the pointer back to the start of the list of objects"""
 		self._pointer = 0
 
-	def getTotal(self):
-		"""Returns the total number of objects stored in this collection"""
-		return self._total
+	def list(self):
+		"""Returns a standard list of the objects within this collection"""
+		# are all the objects made and ready to be returned
+		if len(self._objects) is len(self):
+			return self._objects
+
+		# we need to build some objects - easiest by iterating over them all to build them
+		for obj in self:
+			print "PRINT: " + str(obj)
+
+		return self._objects

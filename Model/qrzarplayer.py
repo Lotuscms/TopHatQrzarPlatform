@@ -20,6 +20,3 @@ class QRzarPlayer(TeamPlayer, PlayerGeoLocate):
 			raise DomainException("That is not a valid QR Code, it should be 6 characters long not %i characters long" % len(code))
 
 		self._qrcode = code
-
-	def dict(self, depth=0):
-		return super(QRzarPlayer, self).dict(depth)	

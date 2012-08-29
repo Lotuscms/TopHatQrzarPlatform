@@ -1,5 +1,6 @@
 from abc import ABCMeta
 from playermapper import PlayerMapper
+from deferredcollection import DeferredCollection
 
 class PlayerTeamlessMapper(PlayerMapper):
 
