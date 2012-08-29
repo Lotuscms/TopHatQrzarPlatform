@@ -7,7 +7,7 @@ class Team(DomainObject):
 
 	_name = "Team"
 	_game = None
-	_players = []
+	_players = None
 
 	def __init__(self, id_=None):
 		super(Team, self).__init__(id_)
@@ -29,3 +29,17 @@ class Team(DomainObject):
 			raise DomainException("Teams can only be part of team games not %s" % str(type(game)))
 
 		self._game = game
+
+	def getPlayers(self):
+		if self._players is None:
+			# load games data
+			from Mapper.qrzarplayermapper import QRzarPlayerMapper
+			PM = QRzarPlayerMapper()
+			self._players = PM.findByTeam(self)
+			
+		return self._players
+
+	def dict(self):
+		self.getPlayers()		# hit lazy load
+
+		super(Team, self).dict()

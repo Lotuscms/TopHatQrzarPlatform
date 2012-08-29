@@ -5,8 +5,6 @@ from Model.Mapper.collection import Collection
 
 class Depth:
 
-	
-
 	@staticmethod
 	def build(obj, depth=0):
 		if not isinstance(obj, DomainObject):
@@ -22,12 +20,12 @@ class Depth:
 		# for all the attributes in the object build them out
 		dic = {}
 		for attr, value in obj.__dict__.items():
-			if attr in hide:
-				continue
-
 			# remove leading _ if it exists
 			if attr[:1] == "_":
 				attr = attr[1:]
+
+			if attr in hide:
+				continue
 
 			# see if value is special circumstance
 			if isinstance(value, Collection):								# Collection

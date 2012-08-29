@@ -70,37 +70,3 @@ class Player(DomainObject):
 
 	def getAlive(self):
 		return self._alive
-
-	def getQRCode(self):
-		return self._qrcode
-
-	def getTeam(self):
-		return self._qrcode[:1]
-
-	def dict(self, depth=0):
-		# Encountered a weird corrupted game item from DB. Better to log this and then return empty set
-		if self._game is None:
-			return {}
-
-		# User may have been deleted, ensure crash does not occur.
-		if self.getUser() is not None:
-			if depth < 0:
-				return { "id": self.getId() }
-			else:
-				return {
-					"id": self.getId(),
-					"name": self.getName(),
-					"user": self.getUser().dict(depth-1),
-					"game": self.getGame().dict(depth-1),
-					"longitude": self.getLon(),
-					"latitude": self.getLat(),
-					"photo": self.getPhoto(),
-					"score": self.getScore(),
-					"time": str(self.getTime()),
-					"qrcode": self.getQRCode(),
-					"team": self.getTeam(),
-					"alive": self.getAlive()
-				}
-		else:
-			return super(Player, self).dict(depth-1)
->>>>>>> 6bab4fb265db0c9003ac7a5b341572a3536dc21e
