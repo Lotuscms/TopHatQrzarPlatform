@@ -50,7 +50,7 @@ class Kills(Request):
 				for kill in kills:
 					killslist.append(Depth.build(kill, 2))
 
-				killdict = {"kills":killslist(), "pagination_offset":offset, "max_perpage": 50}
+				killdict = {"kills": killslist, "pagination_offset": offset, "max_perpage": 50}
 
 				return self._response(killdict, CODE.OK)
 

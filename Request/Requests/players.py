@@ -4,7 +4,7 @@ from Networking.statuscodes import StatusCodes as CODE
 
 from Model.depth import Depth
 from Model.Mapper.qrzargamemapper import QRzarGameMapper
-from Model.Mapper.playermapper import PlayerMapper
+from Model.Mapper.qrzarplayermapper import QRzarPlayerMapper
 from Model.qrzarplayer import QRzarPlayer
 import MySQLdb as mdb
 
@@ -27,7 +27,7 @@ class Players(Request):
 	def _doGet(self):
 		try:
 
-			PM = PlayerMapper()
+			PM = QRzarPlayerMapper()
 
 			if self.arg is not None:
 				if self.arg.isdigit():
@@ -53,7 +53,7 @@ class Players(Request):
 				for player in playerslist:
 					playerslist.append(Depth.build(player, 2))
 
-				playerslist = {"players":playerslist(), "pagination_offset":offset, "max_perpage": 50}
+				playerslist = {"players": playerslist, "pagination_offset": offset, "max_perpage": 50}
 
 				return self._response(playerslist, CODE.OK)
 
