@@ -79,7 +79,7 @@ class Games(Request):
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to create the game in the database (%s)" % e.args[1])
 
-			return self._response(Depth.build(game, 3), CODE.CREATED)
+			return self._response(Depth.build(game, 2), CODE.CREATED)
 		else:
 			raise BadRequest("Required params name not sent")
 

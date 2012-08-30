@@ -67,6 +67,9 @@ class Game(DomainObject):
 		self._end_time = time
 
 	def isStarted(self):
+		if self.getStartTime() is None:
+			return False
+			
 		if self.getStartTime() > datetime.now():
 			self.started = True
 		else:

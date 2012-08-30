@@ -8,7 +8,7 @@ class TeamPlayer(Player):
 
 	_team = None
 
-	def __init__(self, id_):
+	def __init__(self, id_=None):
 		super(TeamPlayer, self).__init__(id_)
 
 	def getTeam(self):

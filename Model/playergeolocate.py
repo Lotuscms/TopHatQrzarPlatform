@@ -9,7 +9,7 @@ class PlayerGeoLocate(Player):
 	_lat = 0.0
 	_lon = 0.0
 
-	def __init__(self, id_):
+	def __init__(self, id_=None):
 		super(PlayerGeoLocate, self).__init__(id_)
 
 	def setLat(self, lat):

@@ -8,7 +8,7 @@ class TeamlessGame(Game):
 
 	_players = None 		# deferred collection of players
 
-	def __init__(self, id_):
+	def __init__(self, id_=None):
 		super(TeamlessGame, self).__init__(id_)
 
 	def getPlayers(self):
