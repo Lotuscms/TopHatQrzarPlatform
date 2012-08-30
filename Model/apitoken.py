@@ -46,15 +46,6 @@ class Apitoken(DomainObject):
 	def getGroup(self):
 		return self._group
 
-	def dict(self, depth=0):
-		if depth < 0 or self.getUser() is None:
-			return { "apitoken": self.getToken() }
-		else:	
-			return {
-				"user": self.getUser().dict(depth-1),
-				"apitoken": self.getToken()
-			}
-
 	def checkPermission(self, permission):
 		# check the list of permissions
 		if permissions.PERMISSIONS[permission] is self._group:

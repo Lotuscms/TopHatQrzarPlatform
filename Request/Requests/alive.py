@@ -2,8 +2,7 @@ from Request.request import Request
 from Request.requesterrors import NotFound, ServerError, Unauthorised, BadRequest
 from Networking.statuscodes import StatusCodes as CODE
 
-from Model.Mapper.gamemapper import GameMapper
-from Model.Mapper.playermapper import PlayerMapper
+from Model.Mapper.qrzarplayermapper import QRzarPlayerMapper
 from Model.player import Player
 import MySQLdb as mdb
 
@@ -24,7 +23,7 @@ class Alive(Request):
 	def _doGet(self):
 		try:
 			
-			PM = PlayerMapper()
+			PM = QRzarPlayerMapper()
 			
 			if self.arg is not None:
 				if self.arg.isdigit():

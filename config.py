@@ -38,7 +38,6 @@ resources = [
 	('/games/', "Games"),
 	('/kills/', "Kills"),
 	('/players/', "Players"),
-	('/gametypes/', "Gametypes"),
 	('/alive/', "Alive")
 ]
 from Networking.Protocols.Cherrypy import Protocol

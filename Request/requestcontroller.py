@@ -45,8 +45,6 @@ class RequestController:
 
 		self.response = response
 
-		
-
 	def __importRequest(self, uri):
 		"""
 			Given the URI it attempts to return an instance of the request class that handles that URI

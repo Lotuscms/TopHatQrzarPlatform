@@ -1,3 +1,4 @@
+from Model.depth import Depth
 from Model.Mapper.usermapper import UserMapper
 from Model.Mapper.apitokenmapper import ApitokenMapper
 from Common.apikeygen import getKey
@@ -46,7 +47,7 @@ class Apitokens(Request):
 				ATM_ = ApitokenMapper()
 				
 				rdata["apitoken"] = ATM_.findTokenByUserId(selectedUser.getId()).getToken()
-				rdata["user"] = selectedUser.dict(1)
+				rdata["user"] = Depth.build(selectedUser, 1)
 
 				return self._response(rdata, CODE.CREATED)
 
@@ -89,6 +90,6 @@ class Apitokens(Request):
 				raise ServerError("Unable to save apitoken in the database (%s)" % e.args[1])
 
 			rdata["apitoken"] = token.getToken()
-			rdata["user"] = blank.dict()
+			rdata["user"] = Depth.build(blank)
 
 			return self._response(rdata, CODE.CREATED)

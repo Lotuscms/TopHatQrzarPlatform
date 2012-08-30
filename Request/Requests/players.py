@@ -2,9 +2,10 @@ from Request.request import Request
 from Request.requesterrors import NotFound, ServerError, Unauthorised, BadRequest
 from Networking.statuscodes import StatusCodes as CODE
 
-from Model.Mapper.gamemapper import GameMapper
-from Model.Mapper.playermapper import PlayerMapper
-from Model.player import Player
+from Model.depth import Depth
+from Model.Mapper.qrzargamemapper import QRzarGameMapper
+from Model.Mapper.qrzarplayermapper import QRzarPlayerMapper
+from Model.qrzarplayer import QRzarPlayer
 import MySQLdb as mdb
 
 # Decorator
@@ -25,9 +26,9 @@ class Players(Request):
 	@require_login
 	def _doGet(self):
 		try:
-			
-			PM = PlayerMapper()
-			
+
+			PM = QRzarPlayerMapper()
+
 			if self.arg is not None:
 				if self.arg.isdigit():
 					# Get the user by ID
@@ -36,10 +37,10 @@ class Players(Request):
 					raise BadRequest("Players must be requested by ID")
 
 				if player is not None:
-					return self._response(player.dict(), CODE.OK)
+					return self._response(Depth.build(player), CODE.OK)
 				else:
 					raise NotFound("This player does not exist")
-			
+
 			else:
 
 				offset = 0
@@ -49,11 +50,10 @@ class Players(Request):
 					raise NotFound("There are no players on this system.")
 
 				playerslist = []
+				for player in playerslist:
+					playerslist.append(Depth.build(player, 2))
 
-				for player in players:
-					playerslist.append(player.dict())
-
-				playerslist = {"players":playerslist, "pagination_offset":offset, "max_perpage": 50}
+				playerslist = {"players": playerslist, "pagination_offset": offset, "max_perpage": 50}
 
 				return self._response(playerslist, CODE.OK)
 
@@ -64,7 +64,7 @@ class Players(Request):
 	def _doPost(self, dataObject):
 		if "name" and "game" and "qrcode" in dataObject:
 			try:
-				GM = GameMapper()
+				GM = QRzarGameMapper()
 
 				if dataObject["game"] is not None and "id" in dataObject["game"]:
 					# Get the user by ID
@@ -77,7 +77,7 @@ class Players(Request):
 
 				PM = PlayerMapper()
 
-				player = Player()
+				player = QRzarPlayer()
 
 				player.setName(dataObject["name"])
 				player.setGame(game)
@@ -86,8 +86,8 @@ class Players(Request):
 
 				PM.insert(player)
 
-				return self._response(player.dict(3), CODE.CREATED)
-				
+				return self._response(Depth.build(player, 3), CODE.CREATED)
+
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to search the user database (%s)" % e.args[1])
 		else:
@@ -96,7 +96,7 @@ class Players(Request):
 	@require_login
 	def _doPut(self, dataObject):
 
-		if  "id" and ("name" or "photo") in dataObject:
+		if  "id" and "name" in dataObject:
 			try:
 
 				PM = PlayerMapper()
@@ -111,16 +111,12 @@ class Players(Request):
 					raise BadRequest("Argument provided for this player type is invalid.")
 
 				if player.getUser() is self.user or self.user.accessLevel('super_user'):
-					if "name" in dataObject:
-						player.setName(dataObject["name"])
-
-					if "photo" in dataObject:
-						player.setPhoto(dataObject["photo"])
+					player.setName(dataObject["name"])
 
 					PM.update(player)
 
-				return self._response(player.dict(3), CODE.CREATED)
-				
+				return self._response(Depth.buld(player, 3), CODE.CREATED)
+
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to search the user database (%s)" % e.args[1])
 		else:
@@ -130,19 +126,19 @@ class Players(Request):
 	def _doDelete(self):
 		if self.arg is None:
 			raise BadRequest("You must provide the ID of the player to be deleted")
-		
+
 		PM = PlayerMapper()
 
 		# get the user if it exists
 		try:
 			if self.arg.isdigit():
-				# Get the user by ID
+				# Get the player by ID
 				player = PM.find(self.arg)
 			else:
 				raise BadRequest("Players must be requested by ID")
 
 		except mdb.DatabaseError, e:
-			raise ServerError("Unable to search the user database (%s: %s)" % e.args[0], e.args[1])
+			raise ServerError("Unable to search the player database (%s: %s)" % e.args[0], e.args[1])
 
 		if player is None:
 				raise NotFound("There is no player identified by the number %s" % self.arg)
@@ -151,7 +147,7 @@ class Players(Request):
 		if not self.user.getId() == player.getUser().getId() and not self.user.accessLevel('super_user'):
 			raise Unauthorised("You do not have sufficient privileges to delete this player.")
 
-		# delete the user from the data base
+		# delete the player from the database
 		result = PM.delete(player)
 
 		if result:

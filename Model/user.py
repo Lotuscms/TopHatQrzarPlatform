@@ -114,29 +114,13 @@ class User(DomainObject):
 	def getGames(self):
 		if self._games is None:
 			# load games data
-			from Mapper.gamemapper import GameMapper
-			GM = GameMapper()
+			from Mapper.qrzargamemapper import QRzarGameMapper
+			GM = QRzarGameMapper()
 			self._games = GM.findByUser(self)
 
 		return self._games
 
-	def dict(self, depth=0):
-		if depth < 0:
-			return { "id": self.getId() }
-		else:
-			# build a list of the games' dict
-			gameslist = []
-			games = self.getGames()
-			if games:
-				for game in games:
-					gameslist.append(game.dict(depth-1))
+	def dict(self):
+		self.getGames()
 
-			return {
-				"id": self.getId(),
-				"name": self.getName(),
-				"email": self.getEmail(),
-				"created": str(self.getTime()),
-				"photo": str(self.getPhoto()),
-				"joined_games": gameslist,
-				"registered": self.getRegistered()
-			}
+		super(User, self).dict()

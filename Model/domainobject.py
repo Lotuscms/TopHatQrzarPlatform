@@ -6,7 +6,7 @@ class DomainObject(object):
 	"""Abstract base class for any object that is compatible with the Mapper for storage in the persistent storage"""
 	__metaclass__ = ABCMeta
 
-	_id = -1				# setup deafult id outside db storage range
+	_id = -1							# setup deafult id outside db storage range
 
 	def __init__(self, id_=None):
 		# check valid id value (pos int)
@@ -47,9 +47,8 @@ class DomainObject(object):
 
 		self._id = value
 
-	@abstractmethod		
-	def dict(self, depth=0):
-		return {"id": self.getId()}
+	def dict(self):
+		pass
 
 	# Object Watcher Functions #
 	def __markDirty(self):

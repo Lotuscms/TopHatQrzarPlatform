@@ -2,10 +2,11 @@ from Request.request import Request
 from Request.requesterrors import NotFound, ServerError, BadRequest, Conflict
 from Networking.statuscodes import StatusCodes as CODE
 
+from Model.depth import Depth
 from Model.kill import Kill
 from Model.Mapper.killmapper import KillMapper
-from Model.Mapper.gamemapper import GameMapper
-from Model.Mapper.playermapper import PlayerMapper
+from Model.Mapper.qrzargamemapper import QRzarGameMapper
+from Model.Mapper.qrzarplayermapper import QRzarPlayerMapper
 from Common.utils import parseDateTime
 import MySQLdb as mdb
 
@@ -37,21 +38,19 @@ class Kills(Request):
 					raise BadRequest("Kill must be requested by ID")
 
 				if kill is not None:
-					return self._response(kill.dict(), CODE.OK)
+					return self._response(Depth.build(kill, 0), CODE.OK)
 				else:
 					raise NotFound("This kill does not exist")
 			
 			else:
-
 				offset = 0
 				kills = KM.findAll(offset, offset+50)
 
 				killslist = []
-
 				for kill in kills:
-					killslist.append(kill.dict())
+					killslist.append(Depth.build(kill, 2))
 
-				killdict = {"kills":killslist, "pagination_offset":offset, "max_perpage": 50}
+				killdict = {"kills": killslist, "pagination_offset": offset, "max_perpage": 50}
 
 				return self._response(killdict, CODE.OK)
 
@@ -66,8 +65,15 @@ class Kills(Request):
 		if "killer" and "victim_qrcode" and "time" in dataObject:
 			try:
 				KM = KillMapper()
-				GM = GameMapper()
-				PM = PlayerMapper()
+				PM = QRzarPlayerMapper()
+
+				if dataObject["killer"] is not None and dataObject["victim"] is not None:
+
+					if "id" in dataObject["killer"] and "id" in dataObject["victim"]:
+						# Get the user by ID
+						killer = PM.find(dataObject["killer"]["id"])
+
+						victim = PM.find(dataObject["victim"]["id"])
 
 				if dataObject["killer"] is not None and dataObject["victim_qrcode"] is not None:
 
@@ -86,6 +92,7 @@ class Kills(Request):
 						try:
 							proptime = parseDateTime(dataObject["time"])
 						except:
+
 							raise BadRequest("""Invalid Time object sent, acceptable formats: Acceptable formats are: "YYYY-MM-DD HH:MM:SS.ssssss+HH:MM",
 							"YYYY-MM-DD HH:MM:SS.ssssss",
 							"YYYY-MM-DD HH:MM:SS+HH:MM",
@@ -95,6 +102,7 @@ class Kills(Request):
 
 				else:
 					raise BadRequest("Arguments provided for this kill are invalid.")
+
 
 				if killer.getAlive() is False:
 					raise Conflict("You are not alive, therefore you can't tag someone else!")

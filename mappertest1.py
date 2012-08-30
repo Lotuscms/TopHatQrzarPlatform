@@ -7,14 +7,22 @@ def main():
 	#setup the config
 	TopHatConfig(path="/home/specialk/Dev/tophat/config.py")
 
-	# do the other stuff
-	from Model.Mapper import gamemapper as GM
-	
-	Mapper = GM.GameMapper()
-	u = Mapper.find(1)
+	from Model.Mapper.qrzargamemapper import QRzarGameMapper
 
-	from pprint import pprint
-	pprint(u.dict(2))
+	#############
+	from Model.Mapper.usermapper import UserMapper
+	UM = UserMapper()
+	user = UM.find(1)
+	user.getGames()
+
+	#for game in user.getGames():
+	#	print game
+
+	from Model.depth import Depth
+	dic = Depth.build(user, 3)
+
+	import pprint
+	pprint.pprint(dic)
 
 if __name__ == "__main__":
     main()
