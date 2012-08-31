@@ -20,28 +20,25 @@ class Alive(Request):
 		super(Alive, self).__init__()
 
 	@require_login
-	def _doGet(self):
-		try:
-			
-			PM = QRzarPlayerMapper()
-			
-			if self.arg is not None:
-				if self.arg.isdigit():
-					# Get the user by ID
-					player = PM.find(self.arg)
-				else:
-					raise BadRequest("Players must be requested by ID")
+	def _doGet(self):	
+		PM = QRzarPlayerMapper()
+		
+		if self.arg is not None or self.arg is not self.arg.isdigit():
+			try:
+				# Get the player by ID
+				player = PM.find(self.arg)
 
-				if player is not None:
-
-					rdata = {
-						"id": player.getId(),
-						"alive": player.getAlive()
-					}
-
-					return self._response(rdata, CODE.OK)
-				else:
-					raise NotFound("This player does not exist")
-
-		except mdb.DatabaseError, e:
+			except mdb.DatabaseError, e:
 				raise ServerError("Unable to search the player database (%s: %s)" % e.args[0], e.args[1])
+
+			if player is None:
+				raise NotFound("This player does not exist")
+
+			rdata = {
+				"alive": player.getAlive()
+			}
+
+			return self._response(rdata, CODE.OK)
+				
+		else:
+			raise BadRequest("Players must be requested by id")

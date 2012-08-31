@@ -8,7 +8,7 @@ class TeamlessPlayer(Player):
 
 	_game = None
 
-	def __init__(self, id_):
+	def __init__(self, id_=None):
 		super(TeamlessPlayer, self).__init__(id_)
 
 	def setGame(self, game_):

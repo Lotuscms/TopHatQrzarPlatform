@@ -75,7 +75,7 @@ class Players(Request):
 				else:
 					raise BadRequest("Argument provided for this game type is invalid.")
 
-				PM = PlayerMapper()
+				PM = QRzarPlayerMapper()
 
 				player = QRzarPlayer()
 

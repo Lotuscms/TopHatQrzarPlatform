@@ -66,21 +66,20 @@ class Games(Request):
 		if self.arg is not None:
 			return self._response({}, CODE.UNIMPLEMENTED)
 
-		if "name" in dataObject:
+		if "name" in dataObject:	
+			GM = QRzarGameMapper()
+
+			game = QRzarGame()
+
+			game.setName(dataObject["name"])
+			game.setCreator(self.user)
+
 			try:
-				GM = QRzarGameMapper()
-
-				game = QRzarGame()
-
-				game.setName(dataObject["name"])
-				game.setCreator(self.user)
-
-				GM.insert(game)
-
-				return self._response(Depth.build(game, 3), CODE.CREATED)
-				
+				GM.insert(game)			
 			except mdb.DatabaseError, e:
-				raise ServerError("Unable to search the user database (%s)" % e.args[1])
+				raise ServerError("Unable to create the game in the database (%s)" % e.args[1])
+
+			return self._response(Depth.build(game, 2), CODE.CREATED)
 		else:
 			raise BadRequest("Required params name not sent")
 

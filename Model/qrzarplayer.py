@@ -6,7 +6,7 @@ class QRzarPlayer(TeamPlayer, PlayerGeoLocate):
 
 	_qrcode = None
 
-	def __init__(self, id_):
+	def __init__(self, id_=None):
 		super(QRzarPlayer, self).__init__(id_)
 
 	def __str__(self):

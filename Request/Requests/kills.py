@@ -9,6 +9,7 @@ from Model.Mapper.qrzargamemapper import QRzarGameMapper
 from Model.Mapper.qrzarplayermapper import QRzarPlayerMapper
 from Common.utils import parseDateTime
 import MySQLdb as mdb
+from datetime import datetime
 
 # Decorator
 from Model.authentication import require_login
@@ -62,7 +63,7 @@ class Kills(Request):
 	@require_login
 	def _doPost(self, dataObject):
 		print str(dataObject)
-		if "killer" and "victim_qrcode" and "time" in dataObject:
+		if "killer" and "victim_qrcode" in dataObject:
 			try:
 				KM = KillMapper()
 				PM = QRzarPlayerMapper()
@@ -88,15 +89,6 @@ class Kills(Request):
 
 						if victim is None:
 							raise NotFound("Either the victim or the killer were invalid player objects")
-
-						try:
-							proptime = parseDateTime(dataObject["time"])
-						except:
-
-							raise BadRequest("""Invalid Time object sent, acceptable formats: Acceptable formats are: "YYYY-MM-DD HH:MM:SS.ssssss+HH:MM",
-							"YYYY-MM-DD HH:MM:SS.ssssss",
-							"YYYY-MM-DD HH:MM:SS+HH:MM",
-							"YYYY-MM-DD HH:MM:SS" """)
 					else:
 						raise BadRequest("Arguments provided for this kill are invalid.")
 
@@ -117,7 +109,7 @@ class Kills(Request):
 				victim.setAlive(False)
 				PM.update(victim)
 
-				kill.setTime(proptime)
+				kill.setTime(datetime.now())
 
 				KM.insert(kill)
 
