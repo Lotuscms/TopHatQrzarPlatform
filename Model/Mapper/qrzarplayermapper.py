@@ -2,6 +2,7 @@ from playerteammapper import PlayerTeamMapper
 from usermapper import UserMapper
 from teammapper import TeamMapper
 from deferredcollection import DeferredCollection
+from collection import Collection
 
 class QRzarPlayerMapper(PlayerTeamMapper):
 
@@ -100,3 +101,29 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 		params = (game.getId(), qrcode)
 
 		return self.getOne(query, params)
+
+	def findInDistance(self, player, distance):
+		from Common.geolocate import findLatBoundaryDistance
+		d = findLatBoundaryDistance(distance)
+		lat1 = player.getLat() - d
+		lat2 = player.getLat() + d
+
+		print d
+		print lat1
+		print lat2
+
+		query = """SELECT *, DISTANCE(lat, lon, %s, %s) AS dist from players 
+					WHERE lat BETWEEN %s AND %s HAVING dist < %s ORDER BY dist ASC LIMIT 50"""
+		params = (player.getLat(), player.getLon(), player.getLat(), player.getLon(), distance)
+
+		print params
+
+		cursor = self.db.getCursor()
+		rowsAffected = cursor.execute(query, params)
+		data = cursor.fetchall()
+		cursor.close()
+
+		if rowsAffected > 0:								# check if there are results to be returned
+			return Collection(data, self) 		# create a collection object for the results
+		else:
+			return None
