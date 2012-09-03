@@ -1,6 +1,7 @@
 from abc import ABCMeta
 from Model.game import Game
 from Model.domainexception import DomainException
+from Model.team import Team
 
 class TeamGame(Game):
 
@@ -19,6 +20,15 @@ class TeamGame(Game):
 			self._teams = TM.getByGame(self)
 
 		return self._teams
+
+	def addTeam(self, team):
+		if not isinstance(team, Team):
+			raise DomainException("Only can only add Team objects to the list of teams in this game")
+
+		team.setGame(team)
+
+		teams = self.getTeams()
+		teams.add(team)
 
 	def dict(self):
 		self.getTeams()		# hit lazy load

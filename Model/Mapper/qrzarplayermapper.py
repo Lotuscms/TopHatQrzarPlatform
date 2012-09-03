@@ -48,7 +48,7 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 		else:
 			alive = 0
 
-		params = (obj.getName(), obj.getGame().getId(), obj.getUser().getId(), 
+		params = (obj.getName(), obj.getTeam().getId(), obj.getUser().getId(), 
 					obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), obj.getQRCode(), alive)
 
 		# run the query
@@ -69,7 +69,7 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 	def _doUpdate(self, obj):
 		# build the query
 		query = """UPDATE players SET 
-					name = %s, game_id = %s, user_id = %s, lat = %s, lon = %s, score = %s, 
+					name = %s, team_id = %s, user_id = %s, lat = %s, lon = %s, score = %s, 
 					time = %s, alive = %s, qrcode = %s 
 					WHERE id = %s LIMIT 1"""
 
@@ -78,7 +78,7 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 		else:
 			alive = 0
 
-		params = (obj.getName(), obj.getGame().getId(), obj.getUser().getId(), 
+		params = (obj.getName(), obj.getTeam().getId(), obj.getUser().getId(), 
 				obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), alive, obj.getQRCode(), obj.getId())
 
 		# run the query
