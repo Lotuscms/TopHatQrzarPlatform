@@ -118,7 +118,7 @@ class Kills(Request):
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to search the user database (%s)" % e.args[1])
 		else:
-			raise BadRequest("Killer, victim and time were not submitted")
+			raise BadRequest("Killer and victim_qrcode were not submitted")
 
 	@require_login
 	def _doPut(self, dataObject):
