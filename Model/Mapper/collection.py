@@ -76,12 +76,20 @@ class Collection(object):
 		if row >= 0 and row < len(self._objects):
 			return self._objects[row]
 
-		# if not empty create and return the object made from that data
-		if (len(self._raw) < (row-1)) or row == 0:
+		
+		""" 
+		For whatever reason you assume that if the item refered to by "row" doesn't reside in in _objects
+		that it is in _objects. I don't know if this is correct or not but regardless an IndexError is being
+		raised by python when trying to access this sometimes. This will suppress this but I'm guessing that it
+		wont fix whatever the underlying problem is.
+		"""
+
+		if not (row >= 0 and row < len(self._raw)):
 			return None
+
+		# if not empty create and return the object made from that data
 		if self._raw[row] is not None:
 			self._objects.insert(row, self._mapper.createObject(self._raw[row]))# build the object
-			print type(self._objects)
 			return self._objects[row]
 		else:
 			return None
