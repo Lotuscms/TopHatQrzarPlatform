@@ -90,7 +90,8 @@ class Kills(Request):
 
 				if killer.getAlive() is False:
 					raise Conflict("You are not alive, therefore you can't tag someone else!")
-
+				if victim.getAlive() is False:
+					raise Conflict("Victim is already dead, let him rest!")
 				kill = Kill()
 
 				kill.setKiller(killer)
