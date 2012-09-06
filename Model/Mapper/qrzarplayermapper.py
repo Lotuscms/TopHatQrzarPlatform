@@ -97,7 +97,7 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 
 		# build the query
 		query = "SELECT * FROM players WHERE team_id = %s AND qrcode = %s LIMIT 1"
-		print query % (team, qrcode)
+		print query % (team.getId(), qrcode)
 		params = (team.getId(), qrcode)
 
 		return self.getOne(query, params)
