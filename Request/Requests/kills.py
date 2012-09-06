@@ -105,6 +105,10 @@ class Kills(Request):
 				kill.setTime(datetime.now())
 
 				KM.insert(kill)
+				
+				killer.incrementScore()
+				PM.update(killer)
+
 
 				return self._response(Depth.build(kill, 3), CODE.CREATED)
 				
