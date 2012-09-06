@@ -105,7 +105,7 @@ class Kills(Request):
 
 				KM.insert(kill)
 
-				return self._response(kill.dict(3), CODE.CREATED)
+				return self._response(Depth.build(kill, 3), CODE.CREATED)
 				
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to search the user database (%s)" % e.args[1])
