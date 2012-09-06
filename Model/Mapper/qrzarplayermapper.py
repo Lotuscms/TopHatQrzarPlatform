@@ -91,13 +91,13 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 		else:
 			return False
 
-	def getPlayerByQrcode(self, team, qrcode):
-		if team is None or qrcode is None:
+	def getPlayerByQrcode(self, game, qrcode):
+		if game is None or qrcode is None:
 			return None
 
 		# build the query
-		query = "SELECT * FROM players WHERE team_id = %s AND qrcode = %s LIMIT 1"
-		print query % (team.getId(), qrcode)
-		params = (team.getId(), qrcode)
+		query = "SELECT p.* FROM players p LEFT JOIN teams t ON t.id = p.team_id WHERE t.game_id=%s AND p.qrcode = %s LIMIT 1"
+		print query % (game.getId(), qrcode)
+		params = (game.getId(), qrcode)
 
 		return self.getOne(query, params)

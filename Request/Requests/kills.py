@@ -77,7 +77,7 @@ class Kills(Request):
 						if killer is None:
 							raise NotFound("Either the victim or the killer were invalid player objects")
 
-						victim = PM.getPlayerByQrcode(killer.getTeam(), dataObject["victim_qrcode"])
+						victim = PM.getPlayerByQrcode(killer.getTeam().getGame(), dataObject["victim_qrcode"])
 
 						if victim is None:
 							raise NotFound("Either the victim or the killer were invalid player objects")
