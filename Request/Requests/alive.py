@@ -23,7 +23,7 @@ class Alive(Request):
 	def _doGet(self):	
 		PM = QRzarPlayerMapper()
 		
-		if self.arg is not None or self.arg is not self.arg.isdigit():
+		if self.arg is not None and self.arg.isdigit():
 			try:
 				# Get the player by ID
 				player = PM.find(self.arg)
@@ -35,7 +35,8 @@ class Alive(Request):
 				raise NotFound("This player does not exist")
 
 			rdata = {
-				"alive": player.getAlive()
+				"alive": player.getAlive(),
+				"score": player.getScore()
 			}
 
 			return self._response(rdata, CODE.OK)
