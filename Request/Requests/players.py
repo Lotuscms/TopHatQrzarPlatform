@@ -3,7 +3,7 @@ from Request.requesterrors import NotFound, ServerError, Unauthorised, BadReques
 from Networking.statuscodes import StatusCodes as CODE
 
 from Model.depth import Depth
-from Model.Mapper.qrzargamemapper import QRzarGameMapper
+from Model.Mapper.teammapper import TeamMapper
 from Model.Mapper.qrzarplayermapper import QRzarPlayerMapper
 from Model.qrzarplayer import QRzarPlayer
 import MySQLdb as mdb
@@ -63,33 +63,30 @@ class Players(Request):
 	@require_login
 	def _doPost(self, dataObject):
 		if "name" and "game" and "qrcode" in dataObject:
+			if "id" not in dataObject["game"]:
+				raise BadRequest("Argument provided for this game type is invalid.")
+
+			reference_code = dataObject["qrcode"][:1]
+
 			try:
-				GM = QRzarGameMapper()
-
-				if dataObject["game"] is not None and "id" in dataObject["game"]:
-					# Get the user by ID
-					game = GM.find(dataObject["game"]["id"])
-
-					if game is None:
-						raise NotFound("The specified game does not exist.")
-				else:
-					raise BadRequest("Argument provided for this game type is invalid.")
-
-				PM = QRzarPlayerMapper()
-
-				player = QRzarPlayer()
-
-				player.setName(dataObject["name"])
-				player.setGame(game)
-				player.setQRCode(dataObject["qrcode"])
-				player.setUser(self.user)
-
-				PM.insert(player)
-
-				return self._response(Depth.build(player, 3), CODE.CREATED)
-
+				team = TeamMapper().findByGameIdAndCode(dataObject["game"]["id"], reference_code)
 			except mdb.DatabaseError, e:
-				raise ServerError("Unable to search the user database (%s)" % e.args[1])
+				raise ServerError("Unable to search the teams database (%s)" % e.args[1])
+
+			if team is None:
+				raise NotFound("Unable to find team to add player to. Check your qrcode setup.")
+
+			player = QRzarPlayer()
+			player.setName(dataObject["name"])
+			player.setQRCode(dataObject["qrcode"])
+			player.setUser(self.user)
+			team.addPlayer(player)
+
+			QRzarPlayerMapper().insert(player)
+
+			return self._response(Depth.build(player, 3), CODE.CREATED)
+
+			
 		else:
 			raise BadRequest("Required params name, game and photo not sent")
 
