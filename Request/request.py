@@ -52,7 +52,6 @@ class Request:
 				self.user = self.apikey.getUser()
 
 			except mdb.DatabaseError, e:
-				print e
 				raise ServerError("Unable to search the user database (%s)" % e.args[1])
 
 			except:

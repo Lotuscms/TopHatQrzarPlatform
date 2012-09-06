@@ -77,8 +77,10 @@ class Collection(object):
 			return self._objects[row]
 
 		# if not empty create and return the object made from that data
+		if (len(self._raw) < (row-1)) or row == 0:
+			return None
 		if self._raw[row] is not None:
-			self._objects.insert(row, self._mapper.createObject(self._raw[row]))			# build the object
+			self._objects.insert(row, self._mapper.createObject(self._raw[row]))# build the object
 			return self._objects[row]
 		else:
 			return None
