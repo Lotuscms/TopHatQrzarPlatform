@@ -39,7 +39,7 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 
 	def _doInsert(self, obj):
 		# build query
-		# id, name, game_id, user_id, lat, lon, score, time, qrcode, alive
+		# id, name, team_id, user_id, lat, lon, score, time, qrcode, alive
 		query = "INSERT INTO players VALUES(NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
 		# convert boolean value to int bool
@@ -96,7 +96,8 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 			return None
 
 		# build the query
-		query = "SELECT * FROM players WHERE game_id = %s AND qrcode = %s LIMIT 1"
+		query = "SELECT p.* FROM players p LEFT JOIN teams t ON t.id = p.team_id WHERE t.game_id=%s AND p.qrcode = %s LIMIT 1"
+		print query % (game.getId(), qrcode)
 		params = (game.getId(), qrcode)
 
 		return self.getOne(query, params)

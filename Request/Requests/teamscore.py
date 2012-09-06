@@ -2,14 +2,14 @@ from Request.request import Request
 from Request.requesterrors import NotFound, ServerError, Unauthorised, BadRequest
 from Networking.statuscodes import StatusCodes as CODE
 
-from Model.Mapper.qrzarplayermapper import QRzarPlayerMapper
-from Model.player import Player
+from Model.Mapper.teammapper import TeamMapper
+from Model.team import Team
 import MySQLdb as mdb
 
 # Decorator
 from Model.authentication import require_login, require_super_user
 
-class Alive(Request):
+class TeamScore(Request):
 
 	''' 
 		API Documentation
@@ -17,29 +17,28 @@ class Alive(Request):
 	'''
 
 	def __init__(self):
-		super(Alive, self).__init__()
+		super(TeamScore, self).__init__()
 
 	@require_login
 	def _doGet(self):	
-		PM = QRzarPlayerMapper()
+		TM = TeamMapper()
 		
 		if self.arg is not None and self.arg.isdigit():
 			try:
-				# Get the player by ID
-				player = PM.find(self.arg)
+				# Get the team by ID
+				team = TM.find(self.arg)
 
 			except mdb.DatabaseError, e:
-				raise ServerError("Unable to search the player database (%s: %s)" % e.args[0], e.args[1])
+				raise ServerError("Unable to search the team database (%s: %s)" % e.args[0], e.args[1])
 
-			if player is None:
-				raise NotFound("This player does not exist")
+			if team is None:
+				raise NotFound("This team does not exist")
 
 			rdata = {
-				"alive": player.getAlive(),
-				"score": player.getScore()
+				"score": team.getScore()
 			}
 
 			return self._response(rdata, CODE.OK)
 				
 		else:
-			raise BadRequest("Players must be requested by id")
+			raise BadRequest("Teams must be requested by id")

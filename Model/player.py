@@ -42,6 +42,15 @@ class Player(DomainObject):
 
 		self._score = score
 
+	def getScore(self):
+		return self._score
+
+	def incrementScore(self):
+		self._score +=1
+
+	def decrementScore(self):
+		self._score -=1
+
 	def setTime(self, time_):
 		if time_ is not None:
 			if type(time_) is not datetime:
@@ -61,9 +70,6 @@ class Player(DomainObject):
 
 	def getUser(self):
 		return self._user	
-
-	def getScore(self):
-		return self._score
 
 	def getTime(self):
 		return self._time

@@ -90,7 +90,8 @@ class Kills(Request):
 
 				if killer.getAlive() is False:
 					raise Conflict("You are not alive, therefore you can't tag someone else!")
-
+				if victim.getAlive() is False:
+					raise Conflict("Victim is already dead, let him rest!")
 				kill = Kill()
 
 				kill.setKiller(killer)
@@ -104,8 +105,12 @@ class Kills(Request):
 				kill.setTime(datetime.now())
 
 				KM.insert(kill)
+				
+				killer.incrementScore()
+				PM.update(killer)
 
-				return self._response(kill.dict(3), CODE.CREATED)
+
+				return self._response(Depth.build(kill, 3), CODE.CREATED)
 				
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to search the user database (%s)" % e.args[1])
