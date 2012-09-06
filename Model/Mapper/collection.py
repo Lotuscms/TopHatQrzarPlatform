@@ -81,6 +81,7 @@ class Collection(object):
 			return None
 		if self._raw[row] is not None:
 			self._objects.insert(row, self._mapper.createObject(self._raw[row]))# build the object
+			print type(self._objects)
 			return self._objects[row]
 		else:
 			return None
