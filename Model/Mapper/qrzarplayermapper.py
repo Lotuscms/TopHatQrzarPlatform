@@ -39,7 +39,7 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 
 	def _doInsert(self, obj):
 		# build query
-		# id, name, game_id, user_id, lat, lon, score, time, qrcode, alive
+		# id, name, team_id, user_id, lat, lon, score, time, qrcode, alive
 		query = "INSERT INTO players VALUES(NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
 		# convert boolean value to int bool
@@ -48,7 +48,7 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 		else:
 			alive = 0
 
-		params = (obj.getName(), obj.getGame().getId(), obj.getUser().getId(), 
+		params = (obj.getName(), obj.getTeam().getId(), obj.getUser().getId(), 
 					obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), obj.getQRCode(), alive)
 
 		# run the query
@@ -69,7 +69,7 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 	def _doUpdate(self, obj):
 		# build the query
 		query = """UPDATE players SET 
-					name = %s, game_id = %s, user_id = %s, lat = %s, lon = %s, score = %s, 
+					name = %s, team_id = %s, user_id = %s, lat = %s, lon = %s, score = %s, 
 					time = %s, alive = %s, qrcode = %s 
 					WHERE id = %s LIMIT 1"""
 
@@ -78,7 +78,7 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 		else:
 			alive = 0
 
-		params = (obj.getName(), obj.getGame().getId(), obj.getUser().getId(), 
+		params = (obj.getName(), obj.getTeam().getId(), obj.getUser().getId(), 
 				obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), alive, obj.getQRCode(), obj.getId())
 
 		# run the query
@@ -91,12 +91,12 @@ class QRzarPlayerMapper(PlayerTeamMapper):
 		else:
 			return False
 
-	def getPlayerByQrcode(self, game, qrcode):
-		if game is None or qrcode is None:
+	def getPlayerByQrcode(self, team, qrcode):
+		if team is None or qrcode is None:
 			return None
 
 		# build the query
-		query = "SELECT * FROM players WHERE game_id = %s AND qrcode = %s LIMIT 1"
-		params = (game.getId(), qrcode)
+		query = "SELECT * FROM players WHERE team_id = %s AND qrcode = %s LIMIT 1"
+		params = (team.getId(), qrcode)
 
 		return self.getOne(query, params)
