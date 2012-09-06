@@ -78,8 +78,8 @@ class Collection(object):
 
 		
 		""" 
-		For whatever reason you assume that if the item refered to by "row" doesn't reside in in _objects
-		that it is in _objects. I don't know if this is correct or not but regardless an IndexError is being
+		For whatever reason you assume that if the item refered to by "row" doesn't reside in _objects
+		that it is in _raw. I don't know if this is correct or not but regardless an IndexError is being
 		raised by python when trying to access this sometimes. This will suppress this but I'm guessing that it
 		wont fix whatever the underlying problem is.
 		"""
