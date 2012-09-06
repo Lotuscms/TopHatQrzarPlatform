@@ -68,14 +68,6 @@ class Kills(Request):
 				KM = KillMapper()
 				PM = QRzarPlayerMapper()
 
-				if dataObject["killer"] is not None and dataObject["victim"] is not None:
-
-					if "id" in dataObject["killer"] and "id" in dataObject["victim"]:
-						# Get the user by ID
-						killer = PM.find(dataObject["killer"]["id"])
-
-						victim = PM.find(dataObject["victim"]["id"])
-
 				if dataObject["killer"] is not None and dataObject["victim_qrcode"] is not None:
 
 					if "id" in dataObject["killer"]:
@@ -85,7 +77,7 @@ class Kills(Request):
 						if killer is None:
 							raise NotFound("Either the victim or the killer were invalid player objects")
 
-						victim = PM.getPlayerByQrcode(killer.getGame(), dataObject["victim_qrcode"])
+						victim = PM.getPlayerByQrcode(killer.getTeam().getGame(), dataObject["victim_qrcode"])
 
 						if victim is None:
 							raise NotFound("Either the victim or the killer were invalid player objects")

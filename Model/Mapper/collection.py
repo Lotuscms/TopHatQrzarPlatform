@@ -76,13 +76,12 @@ class Collection(object):
 		if row >= 0 and row < len(self._objects):
 			return self._objects[row]
 
-		if row >= 0 and row < len(self._raw):
-			# if not empty create and return the object made from that data
-			if self._raw[row] is not None:
-				self._objects.insert(row, self._mapper.createObject(self._raw[row]))                    # build the object
-				return self._objects[row]
-
-		return None
+		# if not empty create and return the object made from that data
+		if self._raw[row] is not None:
+			self._objects.insert(row, self._mapper.createObject(self._raw[row]))                    # build the object
+			return self._objects[row]
+		else:
+			return None
 
 	def next(self):
 		"""Gets the next row - main part of what makes this class iterable"""
