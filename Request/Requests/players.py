@@ -120,8 +120,8 @@ class Players(Request):
 
 				print "%d -- %d" % (player_user_id, authenticated_user_id)
  				if player_user_id == authenticated_user_id or self.user.accessLevel('super_user'):
-					if ("respawn_code" in dataObject and dataObject["respawn_code"] is not None and \
-						dataObject["respawn_code"] == player.getTeam().getRespawnCode()) or self.user.accessLevel('super_user'):
+
+					if dataObject.has_key("respawn_code") and dataObject["respawn_code"] == player.getTeam().getRespawnCode() or self.user.accessLevel('super_user'):
 						print "Player being set alive"
 						player.setAlive(True)
 
