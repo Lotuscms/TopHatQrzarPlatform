@@ -71,7 +71,7 @@ class Players(Request):
 			try:
 				
 				team = TeamMapper().findByGameIdAndCode(dataObject["game"]["id"], reference_code)
-				if QRzarPlayerMapper().getPlayerByQrcode(killer.getTeam().getGame(),qr_code ) is not None:
+				if QRzarPlayerMapper().getPlayerByQrcode(team.getGame(),qr_code ) is not None:
 					raise Conflict("Your QR code is in use in this game: %s." % qr_code)
 
 
