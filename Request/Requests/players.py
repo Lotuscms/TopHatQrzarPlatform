@@ -102,10 +102,10 @@ class Players(Request):
 			try:
 
 				PM = PlayerMapper()
-
+				print "Player id: %d" % dataObject["id"]
 				if dataObject["id"] is not None and dataObject["id"].isdigit():
 					# Get the user by ID
-					print "Player id: %d" % dataObject["id"]
+					
 					player = PM.find(dataObject["id"])
 					print "Player object: ", player
 
