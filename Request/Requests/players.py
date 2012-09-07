@@ -97,12 +97,12 @@ class Players(Request):
 
 	@require_login
 	def _doPut(self, dataObject):
-
+		print "Player id: %d" % dataObject["id"]
 		if  "id" and "name" in dataObject:
 			try:
 
 				PM = PlayerMapper()
-				print "Player id: %d" % dataObject["id"]
+				
 				if dataObject["id"] is not None and dataObject["id"].isdigit():
 					# Get the user by ID
 					
