@@ -115,10 +115,15 @@ class Players(Request):
 				else:
 					raise BadRequest("Argument provided for this player type is invalid.")
 
-				if player.getUser().getId() == self.user.getId() or self.user.accessLevel('super_user'):
+				player_user_id= player.getUser().getId()
+				authenticated_user_id = self.user.getId()
+
+				print "%d -- %d" % (player_user_id, authenticated_user_id)
+ 				if player_user_id == authenticated_user_id or self.user.accessLevel('super_user'):
+					print "User verified"
 					if ("respawn_code" in dataObject and dataObject["respawn_code"] is not None and \
 						dataObject["respawn_code"] == player.getTeam().getRespawnCode()) or self.user.accessLevel('super_user'):
-					
+
 						player.setAlive(True)
 
 					player.setName(dataObject["name"])
