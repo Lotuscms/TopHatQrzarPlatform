@@ -42,7 +42,6 @@ class DataHandler:
 			# Return Server error message with the stacktrace
 			print e
 			response = Response(e, StatusCodes.SERVER_ERROR)
-
 		if response.code is StatusCodes.OK or response.code is StatusCodes.CREATED:
 			response.json = JsonEncoder.toJson(response.data)
 		else:
