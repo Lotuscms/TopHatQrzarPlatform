@@ -128,7 +128,7 @@ class Players(Request):
 							player.setAlive(True)
 
 						else:
-							raise Forbidden("Incorrect respawn QRcode.")
+							raise Forbidden("Incorrect respawn QRcode")
 
 
 
