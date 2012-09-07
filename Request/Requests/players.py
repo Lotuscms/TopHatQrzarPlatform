@@ -1,5 +1,5 @@
 from Request.request import Request
-from Request.requesterrors import NotFound, ServerError, Unauthorised, BadRequest
+from Request.requesterrors import NotFound, ServerError, Unauthorised, BadRequest, Conflict, Forbidden
 from Networking.statuscodes import StatusCodes as CODE
 
 from Model.depth import Depth
@@ -67,18 +67,23 @@ class Players(Request):
 				raise BadRequest("Argument provided for this game type is invalid.")
 
 			reference_code = dataObject["qrcode"][:1]
-
+			qr_code = dataObject["qrcode"]
 			try:
+				
 				team = TeamMapper().findByGameIdAndCode(dataObject["game"]["id"], reference_code)
+				if QRzarPlayerMapper().getPlayerByQrcode(team.getGame(),qr_code ) is not None:
+					raise Conflict("Your QR code is in use in this game: %s." % qr_code)
+
+
 			except mdb.DatabaseError, e:
-				raise ServerError("Unable to search the teams database (%s)" % e.args[1])
+				raise ServerError("Unable to search the teams or players database (%s)" % e.args[1])
 
 			if team is None:
 				raise NotFound("Unable to find team to add player to. Check your qrcode setup.")
 
 			player = QRzarPlayer()
 			player.setName(dataObject["name"])
-			player.setQRCode(dataObject["qrcode"])
+			player.setQRCode(qr_code)
 			player.setUser(self.user)
 			team.addPlayer(player)
 
@@ -95,26 +100,45 @@ class Players(Request):
 		if  "id" and "name" in dataObject:
 			try:
 
-				PM = PlayerMapper()
+				PM = QRzarPlayerMapper()
 
-				if dataObject["id"] is not None and dataObject["id"].isdigit():
+				if type(dataObject["id"]) is int:
 					# Get the user by ID
+
 					player = PM.find(dataObject["id"])
+
+
 
 					if player is None:
 						raise NotFound("The specified player type does not exist.")
 				else:
 					raise BadRequest("Argument provided for this player type is invalid.")
 
-				if player.getUser() is self.user or self.user.accessLevel('super_user'):
+				player_user_id= player.getUser().getId()
+				authenticated_user_id = self.user.getId()
+
+
+ 				if player_user_id == authenticated_user_id or self.user.accessLevel('super_user'):
+
+					if dataObject.has_key("respawn_code"):
+
+
+						if dataObject["respawn_code"] == player.getTeam().getRespawnCode() or self.user.accessLevel('super_user'):
+							player.setAlive(True)
+
+						else:
+							raise Forbidden("Incorrect respawn QRcode")
+
+
+
 					player.setName(dataObject["name"])
 
 					PM.update(player)
 
-				return self._response(Depth.buld(player, 3), CODE.CREATED)
+				return self._response(Depth.build(player, 3), CODE.CREATED)
 
 			except mdb.DatabaseError, e:
-				raise ServerError("Unable to search the user database (%s)" % e.args[1])
+				raise ServerError("Unable to search the player database (%s)" % e.args[1])
 		else:
 			raise BadRequest("Required params name, game and photo not sent")
 
@@ -123,7 +147,7 @@ class Players(Request):
 		if self.arg is None:
 			raise BadRequest("You must provide the ID of the player to be deleted")
 
-		PM = PlayerMapper()
+		PM = QRzarPlayerMapper()
 
 		# get the user if it exists
 		try:
