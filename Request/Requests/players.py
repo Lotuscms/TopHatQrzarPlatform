@@ -105,7 +105,10 @@ class Players(Request):
 
 				if dataObject["id"] is not None and dataObject["id"].isdigit():
 					# Get the user by ID
+					print "Player id: %d" % dataObject["id"]
 					player = PM.find(dataObject["id"])
+					print "Player object: ", player
+
 
 					if player is None:
 						raise NotFound("The specified player type does not exist.")
@@ -120,7 +123,7 @@ class Players(Request):
 				return self._response(Depth.buld(player, 3), CODE.CREATED)
 
 			except mdb.DatabaseError, e:
-				raise ServerError("Unable to search the user database (%s)" % e.args[1])
+				raise ServerError("Unable to search the player database (%s)" % e.args[1])
 		else:
 			raise BadRequest("Required params name, game and photo not sent")
 
