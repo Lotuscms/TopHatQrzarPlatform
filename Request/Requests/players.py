@@ -120,7 +120,7 @@ class Players(Request):
 
 					PM.update(player)
 
-				return self._response(Depth.buld(player, 3), CODE.CREATED)
+				return self._response(Depth.build(player, 3), CODE.CREATED)
 
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to search the player database (%s)" % e.args[1])
