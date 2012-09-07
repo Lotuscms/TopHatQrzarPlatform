@@ -84,11 +84,10 @@ class Players(Request):
 
 			QRzarPlayerMapper().insert(player)
 
-			return self._response(Depth.build(player, 3), CODE.CREATED)
+			return self._response(Depth.build(player, 2), CODE.CREATED)
 
-			
 		else:
-			raise BadRequest("Required params name, game and photo not sent")
+			raise BadRequest("Required params name, game and qrcode not sent")
 
 	@require_login
 	def _doPut(self, dataObject):

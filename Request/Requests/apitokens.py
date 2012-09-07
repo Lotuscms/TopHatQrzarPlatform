@@ -31,7 +31,7 @@ class Apitokens(Request):
 				umapper = UserMapper()
 				selectedUser = umapper.getUserByEmail(username)
 			except mdb.DatabaseError, e:
-				raise ServerError("Unable to search the user database (%s: %s)" % e.args[0], e.args[1])
+				raise ServerError("Unable to search the user database (%d: %s)" % e.args[0], e.args[1])
 
 			# check we have a result
 			if selectedUser is None:
@@ -52,7 +52,7 @@ class Apitokens(Request):
 				return self._response(rdata, CODE.CREATED)
 
 			except mdb.DatabaseError, e:
-				raise ServerError("Unable to get API key from the database (%s: %s)" % e.args[0], e.args[1])
+				raise ServerError("Unable to get API key from the database (%d: %s)" % e.args[0], e.args[1])
 
 		else:
 			# Anonymous login

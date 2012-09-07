@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: tophat
 -- ------------------------------------------------------
--- Server version	5.5.24-0ubuntu0.12.04.1-log
+-- Server version 5.5.24-0ubuntu0.12.04.1-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;

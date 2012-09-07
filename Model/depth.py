@@ -51,6 +51,7 @@ class Depth:
 
 		built_items = []
 		for item in list_:
+			print item
 			built_items.append(Depth.build(item, depth-1))
 
 		return built_items
