@@ -4,7 +4,7 @@ SSLCertPath= 'keys/tophat.crt'
 
 SSLCAPath = 'keys/ca.crt'		
 
-Port=443
+Port=8880
 
 Interface='0.0.0.0'
 
@@ -25,7 +25,7 @@ MySQLHost='localhost'
 
 MySQLUser='tophat'
 
-MySQLPass='pho8Ainu'
+MySQLPass='password'
 
 MySQLDatabase='tophat'
 
@@ -45,3 +45,8 @@ from Networking.Protocols.Cherrypy import Protocol
 Version='0.1.2'
 GameVersion='0.0.2'
 ServerTitle='TopHat QRzar Testing Server'
+
+try:
+	from local_config import * 
+except ImportError:
+	pass

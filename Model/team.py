@@ -8,6 +8,7 @@ class Team(DomainObject):
 	_reference_code = None
 	_game = None
 	_players = None
+	_respawn_code = None
 
 	def __init__(self, id_=None):
 		super(Team, self).__init__(id_)
@@ -30,6 +31,15 @@ class Team(DomainObject):
 
 		self._reference_code = code
 
+	def getRespawnCode(self):
+		return self._respawn_code
+
+	def setRespawnCode(self, code):
+		if len(code) is not 6:
+			raise DomainException("Respawn Code is a six character code")
+
+		self._respawn_code = code
+
 	def getGame(self):
 		return self._game
 
@@ -48,8 +58,9 @@ class Team(DomainObject):
 			self._players = PM.findByTeam(self)
 			
 		return self._players
+
 	def getScore(self):
-		score_sum=0
+		score_sum = 0
 		for playa in self.getPlayers():
 			score_sum += playa.getScore()
 		return score_sum

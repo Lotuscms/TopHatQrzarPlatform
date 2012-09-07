@@ -27,16 +27,18 @@ class TeamMapper(Mapp):
 
 		# rest of the vars
 		team.setName(data["name"])
+		team.setRespawnCode(data["respawn_code"])
+		team.setReferenceCode(data["reference_code"])
 
 		return team
 
 	def _doInsert(self, obj):
 		# build query
 		# id, name, game_id
-		query = "INSERT INTO teams VALUES(NULL, %s, %s, %s)"
+		query = "INSERT INTO teams VALUES(NULL, %s, %s, %s, %s)"
 
 		# convert boolean value to int bool
-		params = (obj.getName(), obj.getGame().getId(), obj.getReferenceCode())
+		params = (obj.getName(), obj.getGame().getId(), obj.getReferenceCode(), obj.getRespawnCode())
 
 		# run the query
 		cursor = self.db.getCursor()
@@ -56,8 +58,8 @@ class TeamMapper(Mapp):
 
 	def _doUpdate(self, obj):
 		# build the query
-		query = "UPDATE teams SET name = %s, game_id = %s, reference_code = %s WHERE id = %s LIMIT 1"
-		params = (obj.getName(), obj.getGame().getId(), obj.getReferenceCode(), obj.getId())
+		query = "UPDATE teams SET name = %s, game_id = %s, reference_code = %s, respawn_code = %s WHERE id = %s LIMIT 1"
+		params = (obj.getName(), obj.getGame().getId(), obj.getReferenceCode(), obj.getRespawnCode(), obj.getId())
 
 		# run the query
 		cursor = self.db.getCursor()
