@@ -103,7 +103,7 @@ class Players(Request):
 
 				PM = QRzarPlayerMapper()
 
-				if dataObject["id"] is not None and dataObject["id"].isdigit():
+				if type(dataObject["id"]) is int:
 					# Get the user by ID
 					print "Player id: %d" % dataObject["id"]
 					player = PM.find(dataObject["id"])
