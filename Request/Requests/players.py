@@ -97,9 +97,7 @@ class Players(Request):
 
 	@require_login
 	def _doPut(self, dataObject):
-		from sys import exit
-		exit(0)
-		print "Player id: %d" % dataObject["id"]
+
 		if  "id" and "name" in dataObject:
 			try:
 
@@ -107,7 +105,7 @@ class Players(Request):
 
 				if dataObject["id"] is not None and dataObject["id"].isdigit():
 					# Get the user by ID
-					
+					print "Player id: %d" % dataObject["id"]
 					player = PM.find(dataObject["id"])
 					print "Player object: ", player
 
