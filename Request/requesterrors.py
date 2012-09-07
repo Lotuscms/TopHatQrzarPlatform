@@ -63,9 +63,13 @@ class Forbidden(RequestError):
 		do not grant the client permission to access the resource
 	"""
 
-	def __init__(self):
+	def __init__(self, message = None):
 		self.code = CODE.FORBIDDEN
-		self.message = "Forbidden; you cannot access that resource without higher priviledges"
+		
+		if message is None:
+			self.message = "Forbidden; you cannot access that resource without higher priviledges"
+		else:
+			self.message = message
 
 class MethodNotAllowed(RequestError):
 	"""HTTP 405 - A request was made of a resource using a request method not supported by that resource"""
