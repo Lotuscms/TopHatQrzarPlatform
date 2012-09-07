@@ -67,18 +67,23 @@ class Players(Request):
 				raise BadRequest("Argument provided for this game type is invalid.")
 
 			reference_code = dataObject["qrcode"][:1]
-
+			qr_code = dataObject["qrcode"]
 			try:
+				
 				team = TeamMapper().findByGameIdAndCode(dataObject["game"]["id"], reference_code)
+				if QRzarPlayerMapper().getPlayerByQrcode(killer.getTeam().getGame(),qr_code ) is not None:
+					raise Conflict("Your QR code is in use in this game: %s." % qr_code)
+
+
 			except mdb.DatabaseError, e:
-				raise ServerError("Unable to search the teams database (%s)" % e.args[1])
+				raise ServerError("Unable to search the teams or players database (%s)" % e.args[1])
 
 			if team is None:
 				raise NotFound("Unable to find team to add player to. Check your qrcode setup.")
 
 			player = QRzarPlayer()
 			player.setName(dataObject["name"])
-			player.setQRCode(dataObject["qrcode"])
+			player.setQRCode(qr_code)
 			player.setUser(self.user)
 			team.addPlayer(player)
 

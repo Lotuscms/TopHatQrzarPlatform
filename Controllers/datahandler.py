@@ -15,7 +15,7 @@ class DataHandler:
 	def handleIt(self, opcode, uri, key, data):
 
 		response = None
-		print data
+		#print data
 		try:
 			if opcode is 0:
 				RC = RequestController(opcode, uri, key, None)
@@ -35,12 +35,13 @@ class DataHandler:
 		except RequestError as e:
 			# Handles Errors raised in requests. Errors contain a message and errorcode.
 			response = Response(e.message, e.code)
-		except ValueError:
-			traceback.print_exc(file=sys.stdout)
+		except ValueError as e:
+			print e
 			response = Response("JSON Data was invalid.", StatusCodes.BAD_REQUEST)
-		except:
+		except Exception as e:
 			# Return Server error message with the stacktrace
-			response = Response(traceback.format_exc(), StatusCodes.SERVER_ERROR)
+			print e
+			response = Response(e, StatusCodes.SERVER_ERROR)
 
 		if response.code is StatusCodes.OK or response.code is StatusCodes.CREATED:
 			response.json = JsonEncoder.toJson(response.data)
