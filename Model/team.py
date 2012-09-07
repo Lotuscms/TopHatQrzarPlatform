@@ -48,6 +48,11 @@ class Team(DomainObject):
 			self._players = PM.findByTeam(self)
 			
 		return self._players
+	def getScore(self):
+		score_sum=0
+		for playa in self.getPlayers():
+			score_sum += playa.getScore()
+		return score_sum
 
 	def addPlayer(self, player):
 		from Model.teamplayer import TeamPlayer

@@ -4,7 +4,7 @@ SSLCertPath= 'keys/tophat.crt'
 
 SSLCAPath = 'keys/ca.crt'		
 
-Port=8880
+Port=443
 
 Interface='0.0.0.0'
 
@@ -25,7 +25,7 @@ MySQLHost='localhost'
 
 MySQLUser='tophat'
 
-MySQLPass='password'
+MySQLPass='pho8Ainu'
 
 MySQLDatabase='tophat'
 

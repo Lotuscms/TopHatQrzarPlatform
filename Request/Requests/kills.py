@@ -68,14 +68,6 @@ class Kills(Request):
 				KM = KillMapper()
 				PM = QRzarPlayerMapper()
 
-				if dataObject["killer"] is not None and dataObject["victim"] is not None:
-
-					if "id" in dataObject["killer"] and "id" in dataObject["victim"]:
-						# Get the user by ID
-						killer = PM.find(dataObject["killer"]["id"])
-
-						victim = PM.find(dataObject["victim"]["id"])
-
 				if dataObject["killer"] is not None and dataObject["victim_qrcode"] is not None:
 
 					if "id" in dataObject["killer"]:
@@ -85,7 +77,7 @@ class Kills(Request):
 						if killer is None:
 							raise NotFound("Either the victim or the killer were invalid player objects")
 
-						victim = PM.getPlayerByQrcode(killer.getGame(), dataObject["victim_qrcode"])
+						victim = PM.getPlayerByQrcode(killer.getTeam().getGame(), dataObject["victim_qrcode"])
 
 						if victim is None:
 							raise NotFound("Either the victim or the killer were invalid player objects")
@@ -98,7 +90,8 @@ class Kills(Request):
 
 				if killer.getAlive() is False:
 					raise Conflict("You are not alive, therefore you can't tag someone else!")
-
+				if victim.getAlive() is False:
+					raise Conflict("Victim is already dead, let him rest!")
 				kill = Kill()
 
 				kill.setKiller(killer)
@@ -112,13 +105,17 @@ class Kills(Request):
 				kill.setTime(datetime.now())
 
 				KM.insert(kill)
+				
+				killer.incrementScore()
+				PM.update(killer)
 
-				return self._response(kill.dict(3), CODE.CREATED)
+
+				return self._response(Depth.build(kill, 3), CODE.CREATED)
 				
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to search the user database (%s)" % e.args[1])
 		else:
-			raise BadRequest("Killer, victim and time were not submitted")
+			raise BadRequest("Killer and victim_qrcode were not submitted")
 
 	@require_login
 	def _doPut(self, dataObject):

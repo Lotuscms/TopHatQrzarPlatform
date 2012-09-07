@@ -15,7 +15,7 @@ class DataHandler:
 	def handleIt(self, opcode, uri, key, data):
 
 		response = None
-
+		print data
 		try:
 			if opcode is 0:
 				RC = RequestController(opcode, uri, key, None)
