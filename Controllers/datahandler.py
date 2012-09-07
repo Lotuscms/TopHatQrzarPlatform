@@ -36,12 +36,12 @@ class DataHandler:
 			# Handles Errors raised in requests. Errors contain a message and errorcode.
 			response = Response(e.message, e.code)
 		except ValueError as e:
-			print e
+			print e.message
 			response = Response("JSON Data was invalid.", StatusCodes.BAD_REQUEST)
 		except Exception as e:
 			# Return Server error message with the stacktrace
-			print e
-			response = Response(e, StatusCodes.SERVER_ERROR)
+			print e.message
+			response = Response(e.message, StatusCodes.SERVER_ERROR)
 		if response.code is StatusCodes.OK or response.code is StatusCodes.CREATED:
 			response.json = JsonEncoder.toJson(response.data)
 		else:
