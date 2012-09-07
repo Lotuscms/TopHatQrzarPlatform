@@ -1,5 +1,5 @@
 from Request.request import Request
-from Request.requesterrors import NotFound, ServerError, Unauthorised, BadRequest, Conflict
+from Request.requesterrors import NotFound, ServerError, Unauthorised, BadRequest, Conflict, Forbidden
 from Networking.statuscodes import StatusCodes as CODE
 
 from Model.depth import Depth
@@ -121,9 +121,16 @@ class Players(Request):
 
  				if player_user_id == authenticated_user_id or self.user.accessLevel('super_user'):
 
-					if dataObject.has_key("respawn_code") and dataObject["respawn_code"] == player.getTeam().getRespawnCode() or self.user.accessLevel('super_user'):
+					if dataObject.has_key("respawn_code"):
 
-						player.setAlive(True)
+
+						if dataObject["respawn_code"] == player.getTeam().getRespawnCode() or self.user.accessLevel('super_user'):
+							player.setAlive(True)
+
+						else:
+							raise Forbidden("Incorrect respawn QRcode.")
+
+
 
 					player.setName(dataObject["name"])
 
