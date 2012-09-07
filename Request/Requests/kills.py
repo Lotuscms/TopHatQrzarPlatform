@@ -86,8 +86,9 @@ class Kills(Request):
 
 				else:
 					raise BadRequest("Arguments provided for this kill are invalid.")
-
-
+				print killer.getId(), victim.getId(), "Ids in request"
+				if killer.getId() == victim.getId():
+					raise Conflict("You cannot kill yourself, that's a sin!!!!!11111OMGZ")
 				if killer.getAlive() is False:
 					raise Conflict("You are not alive, therefore you can't tag someone else!")
 				if victim.getAlive() is False:
