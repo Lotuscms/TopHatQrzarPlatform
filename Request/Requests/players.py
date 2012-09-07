@@ -105,9 +105,9 @@ class Players(Request):
 
 				if type(dataObject["id"]) is int:
 					# Get the user by ID
-					print "Player id: %d" % dataObject["id"]
+
 					player = PM.find(dataObject["id"])
-					print "Player object: ", player
+
 
 
 					if player is None:
@@ -118,11 +118,11 @@ class Players(Request):
 				player_user_id= player.getUser().getId()
 				authenticated_user_id = self.user.getId()
 
-				print "%d -- %d" % (player_user_id, authenticated_user_id)
+
  				if player_user_id == authenticated_user_id or self.user.accessLevel('super_user'):
 
 					if dataObject.has_key("respawn_code") and dataObject["respawn_code"] == player.getTeam().getRespawnCode() or self.user.accessLevel('super_user'):
-						print "Player being set alive"
+
 						player.setAlive(True)
 
 					player.setName(dataObject["name"])
