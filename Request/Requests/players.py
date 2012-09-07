@@ -1,5 +1,5 @@
 from Request.request import Request
-from Request.requesterrors import NotFound, ServerError, Unauthorised, BadRequest
+from Request.requesterrors import NotFound, ServerError, Unauthorised, BadRequest, Conflict
 from Networking.statuscodes import StatusCodes as CODE
 
 from Model.depth import Depth
