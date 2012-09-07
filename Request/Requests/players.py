@@ -101,7 +101,7 @@ class Players(Request):
 		if  "id" and "name" in dataObject:
 			try:
 
-				PM = PlayerMapper()
+				PM = QRzarPlayerMapper()
 
 				if dataObject["id"] is not None and dataObject["id"].isdigit():
 					# Get the user by ID
@@ -132,7 +132,7 @@ class Players(Request):
 		if self.arg is None:
 			raise BadRequest("You must provide the ID of the player to be deleted")
 
-		PM = PlayerMapper()
+		PM = QRzarPlayerMapper()
 
 		# get the user if it exists
 		try:
