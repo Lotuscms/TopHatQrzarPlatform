@@ -115,8 +115,10 @@ class Players(Request):
 				else:
 					raise BadRequest("Argument provided for this player type is invalid.")
 
-				if player.getUser() is self.user or self.user.accessLevel('super_user'):
-					if ("respawn_code" in dataObject and dataObject["respawn_code"] is not None and dataObject["respawn_code"] == player.getTeam().getRespawnCode()) or self.user.accessLevel('super_user'):
+				if player.getUser().getId() == self.user.getId() or self.user.accessLevel('super_user'):
+					if ("respawn_code" in dataObject and dataObject["respawn_code"] is not None and \
+						dataObject["respawn_code"] == player.getTeam().getRespawnCode()) or self.user.accessLevel('super_user'):
+					
 						player.setAlive(True)
 
 					player.setName(dataObject["name"])
