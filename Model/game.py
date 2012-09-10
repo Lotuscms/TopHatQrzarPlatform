@@ -2,6 +2,7 @@ from abc import ABCMeta
 from datetime import datetime
 from Model.domainobject import DomainObject
 from Model.domainexception import DomainException
+from Model.deferredobject import DeferredObject
 
 class Game(DomainObject):
 
@@ -43,7 +44,7 @@ class Game(DomainObject):
 	def setCreator(self, creator):
 		from Model.user import User
 
-		if not isinstance(creator, User):
+		if not isinstance(creator, User) and not isinstance(creator, DeferredObject):
 			raise DomainException("Creator must be an instance of the User object not a %s" % str(type(creator)))
 
 		self._creator = creator

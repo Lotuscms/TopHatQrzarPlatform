@@ -3,6 +3,7 @@ from Model.domainobject import DomainObject
 from Model.player import Player
 from Model.game import Game
 from Model.domainexception import DomainException
+from Model.deferredobject import DeferredObject
 
 class Kill(DomainObject):
 	
@@ -31,14 +32,14 @@ class Kill(DomainObject):
 
 	def setKiller(self, killer):
 		if killer is not None:
-			if not isinstance(killer, Player):
+			if not isinstance(killer, Player) and not isinstance(killer, DeferredObject):
 				raise DomainException("Killer must be a Player object")
 
 		self._killer = killer
 
 	def setVictim(self, victim):
 		if victim is not None:
-			if not isinstance(victim, Player):
+			if not isinstance(victim, Player) and not isinstance(victim, DeferredObject):
 				raise DomainException("Victim must be a Player object")
 
 		self._victim = victim

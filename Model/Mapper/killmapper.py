@@ -1,7 +1,5 @@
 import time
 from mapper import Mapp
-from qrzarplayermapper import QRzarPlayerMapper
-from gamemapper import GameMapper
 
 class KillMapper(Mapp):
 
@@ -17,11 +15,13 @@ class KillMapper(Mapp):
 	def _doCreateObject(self, data):
 		"""Builds the kill object using the raw data provided from the database"""
 		from Model.kill import Kill
+		from Model.qrzarplayer import QRzarPlayer
+		from Model.deferredobject import DeferredObject
+
 		kill_ = Kill(data["id"])
 
-		pmapper = QRzarPlayerMapper()
-		killer = pmapper.find(data["killer_player_id"])
-		victim = pmapper.find(data["victim_player_id"])
+		killer = DeferredObject(QRzarPlayer(data["killer_player_id"]))
+		victim = DeferredObject(QRzarPlayer(data["victim_player_id"]))
 
 		kill_.setKiller(killer)
 		kill_.setVictim(victim)

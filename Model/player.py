@@ -4,6 +4,7 @@ from Model.domainobject import DomainObject
 from Model.user import User
 from Model.game import Game
 from Model.domainexception import DomainException
+from Model.deferredobject import DeferredObject
 
 class Player(DomainObject):
 
@@ -26,7 +27,7 @@ class Player(DomainObject):
 		self._name = name
 
 	def setUser(self, user_):
-		if not isinstance(user_, User):
+		if not isinstance(user_, User) and not isinstance(user_, DeferredObject):
 			raise DomainException("User attribute must be a reference to another User object not a %s" % str(type(user_)))
 
 		self._user = user_

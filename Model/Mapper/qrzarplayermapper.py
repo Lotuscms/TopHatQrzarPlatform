@@ -1,9 +1,5 @@
 from playerteammapper import PlayerTeamMapper
 from playergeolocatemapper import PlayerGeolocateMapper
-from usermapper import UserMapper
-from teammapper import TeamMapper
-from deferredcollection import DeferredCollection
-from collection import Collection
 
 class QRzarPlayerMapper(PlayerTeamMapper, PlayerGeolocateMapper):
 
@@ -19,14 +15,16 @@ class QRzarPlayerMapper(PlayerTeamMapper, PlayerGeolocateMapper):
 	def _doCreateObject(self, data):
 		"""Builds the kill object using the raw data provided from the database"""
 		from Model.qrzarplayer import QRzarPlayer
+		from Model.user import User
+		from Model.team import Team
+		from Model.deferredobject import DeferredObject
+
 		player = QRzarPlayer(data["id"])
 
-		TM = TeamMapper()
-		team = TM.find(data["team_id"])
+		team = DeferredObject(Team(data["team_id"]))
 		player.setTeam(team)
 
-		UM = UserMapper()
-		user = UM.find(data["user_id"])
+		user = DeferredObject(User(data["user_id"]))
 		player.setUser(user)
 
 		player.setName(data["name"])

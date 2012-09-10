@@ -45,7 +45,9 @@ class Team(DomainObject):
 
 	def setGame(self, game):
 		from Model.teamgame import TeamGame
-		if not isinstance(game, TeamGame):
+		from Model.deferredobject import DeferredObject
+		
+		if not isinstance(game, TeamGame) and not isinstance(game, DeferredObject):
 			raise DomainException("Teams can only be part of team games not %s" % str(type(game)))
 
 		self._game = game
