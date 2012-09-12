@@ -1,6 +1,7 @@
 from abc import ABCMeta
 from Model.player import Player
 from Model.domainexception import DomainException
+from Model.deferredobject import DeferredObject
 
 class TeamPlayer(Player):
 
@@ -17,7 +18,7 @@ class TeamPlayer(Player):
 	def setTeam(self, team):
 		from Model.team import Team
 
-		if not isinstance(team, Team):
+		if not isinstance(team, Team) and not isinstance(team, DeferredObject):
 			raise DomainException("Team var must reference a team object not a %s" % str(type(team)))
 
 		self._team = team

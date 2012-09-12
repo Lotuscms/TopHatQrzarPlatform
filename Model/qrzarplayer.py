@@ -10,7 +10,7 @@ class QRzarPlayer(TeamPlayer, PlayerGeoLocate):
 		super(QRzarPlayer, self).__init__(id_)
 
 	def __str__(self):
-		return self._name + " (" + self._user.getName() + ") for team " + self._team.getName() + " in game " + self.getTeam().getGame().getName() + " with a score of " + str(self._score) + " (" + str(self._time) + ")"
+		return self._name + " (" + self.getUser().getName() + ") for team " + self.getTeam().getName() + " in game " + self.getTeam().getGame().getName() + " with a score of " + str(self.getScore()) + " (" + str(self.getTime()) + ")"
 
 	def getQRCode(self):
 		return self._qrcode

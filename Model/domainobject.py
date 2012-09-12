@@ -70,27 +70,16 @@ class DomainObject(object):
 	def markClean(self):
 		self.__markClean()
 
-	def mapperClass(self):
+	def mapper(self):
 		"""Returns the mapper object that this class should use to map this object to storage"""
 		mapperName = str(self.__class__.__name__) + "Mapper"
-		moduleName = "Mapper." + mapperName.lower()
+		moduleName = mapperName.lower()
+
+		mapperModule = __import__("Model.Mapper." + moduleName, fromlist=[mapperName])				# import the class
 
 		try:
-			mapperModule = __import__(moduleName, fromlist=["Mapper"])				# import the class
-			
-			for name in dir(mapperModule):
-				try:
-					# create a new instance of the mapper class and return it
-					M = getattr(mapperModule, mapperName)()							
-					return M
-
-				except AttributeError:
-					print "Cannot create instance of the mapper object"
-					return None
-
-		except ImportError:
-			print "Unable to import Mapper." + moduleName + ". It does not exist"
-			return None
-
-	def mapper(self):
-		return self.mapperClass()
+			instance = getattr(mapperModule, mapperName)()
+			return instance
+		except AttributeError:
+			# now that we have checked all the items in the mapperModule
+			raise AttributeError("Unable to create an instance of the mapper class " + mapperName)

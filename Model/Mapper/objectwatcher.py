@@ -90,7 +90,7 @@ class ObjectWatcher:
 
 		# insert new objects
 		for newObj in self.__new:
-			M = newObj.mapperClass()	# gets the specific mapper this object needs to be added to storage
+			M = newObj.mapper()	# gets the specific mapper this object needs to be added to storage
 			if M is not None:
 				M.insert(newObj)
 			else:
@@ -98,7 +98,7 @@ class ObjectWatcher:
 
 		# update changed objects
 		for changedObj in self.__dirty:
-			M = changedObj.mapperClass() # get specific mapper for this object
+			M = changedObj.mapper() # get specific mapper for this object
 			if M is not None:
 				M.update(changedObj)
 			else:
@@ -107,7 +107,7 @@ class ObjectWatcher:
 		# delete old objects
 		for delObj in self.__delete:
 			if M is not None:
-				M = delObj.mapperClass()
+				M = delObj.mapper()
 				M.delete(delObj)
 			else:
 				print "Unable to finder mapper for " + str(delObj) + ". Object not being deleted."

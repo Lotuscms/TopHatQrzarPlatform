@@ -64,57 +64,70 @@ class Kills(Request):
 	def _doPost(self, dataObject):
 		print str(dataObject)
 		if "killer" and "victim_qrcode" in dataObject:
-			try:
-				KM = KillMapper()
-				PM = QRzarPlayerMapper()
+			KM = KillMapper()
+			PM = QRzarPlayerMapper()
 
-				if dataObject["killer"] is not None and dataObject["victim_qrcode"] is not None:
+			if dataObject["killer"] is not None and dataObject["victim_qrcode"] is not None:
 
-					if "id" in dataObject["killer"]:
-						# Get the user by ID
-						killer = PM.find(dataObject["killer"]["id"])
+				if "id" in dataObject["killer"]:
+					try:
+						# Get the player by ID
+						killer = PM.find(dataObject["killer"]["id"])		
+					except mdb.DatabaseError, e:
+						raise ServerError("Unable to search the player database for the killer (%s)" % e.args[1])
 
-						if killer is None:
-							raise NotFound("Either the victim or the killer were invalid player objects")
+					if killer is None:
+						raise NotFound("Either the victim or the killer were invalid player objects")
 
+					try:
 						victim = PM.getPlayerByQrcode(killer.getTeam().getGame(), dataObject["victim_qrcode"])
+					except mdb.DatabaseError, e:
+						raise ServerError("Unable to search the player database for the victim (%s)" % e.args[1])
 
-						if victim is None:
-							raise NotFound("Either the victim or the killer were invalid player objects")
-					else:
-						raise BadRequest("Arguments provided for this kill are invalid.")
-
+					if victim is None:
+						raise NotFound("Either the victim or the killer were invalid player objects")
 				else:
 					raise BadRequest("Arguments provided for this kill are invalid.")
-				print killer.getId(), victim.getId(), "Ids in request"
-				if killer.getId() == victim.getId():
-					raise Conflict("You cannot kill yourself, that's a sin!!!!!11111OMGZ")
-				if killer.getAlive() is False:
-					raise Conflict("You are not alive, therefore you can't tag someone else!")
-				if victim.getAlive() is False:
-					raise Conflict("Victim is already dead, let him rest!")
-				kill = Kill()
 
-				kill.setKiller(killer)
-				kill.setVictim(victim)
-				kill.setVerified(False)
+			else:
+				raise BadRequest("Arguments provided for this kill are invalid.")
 
-				# Even though unverified, let's set that user as dead for now
-				victim.setAlive(False)
-				PM.update(victim)
+			if killer.getId() == victim.getId():
+				raise Conflict("You cannot kill yourself, that's a sin!!!!!11111OMGZ")
+			
+			if killer.getAlive() is False:
+				raise Conflict("You are not alive, therefore you can't tag someone else!")
+			
+			if victim.getAlive() is False:
+				raise Conflict("Victim is already dead, let him rest!")
+			
+			kill = Kill()
+			kill.setKiller(killer)
+			kill.setVictim(victim)
+			kill.setVerified(False)
 
-				kill.setTime(datetime.now())
-
-				KM.insert(kill)
-				
-				killer.incrementScore()
-				PM.update(killer)
-
-
-				return self._response(Depth.build(kill, 3), CODE.CREATED)
-				
+			# Even though unverified, let's set that user as dead for now
+			victim.setAlive(False)
+			try:
+				PM.update(victim)	
 			except mdb.DatabaseError, e:
-				raise ServerError("Unable to search the user database (%s)" % e.args[1])
+				raise ServerError("Unable to update the victim record in the database (%s)" % e.args[1])
+
+			kill.setTime(datetime.now())
+
+			try:
+				KM.insert(kill)					
+			except mdb.DatabaseError, e:
+				raise ServerError("Unable to create the kill record in the db (%s)" % e.args[1])
+			
+			killer.incrementScore()
+			try:
+				PM.update(killer)
+			except mdb.DatabaseError, e:
+				raise ServerError("Unable to update the killer in the database (%s)" % e.args[1])
+
+
+			return self._response(Depth.build(kill, 3), CODE.CREATED)
 		else:
 			raise BadRequest("Killer and victim_qrcode were not submitted")
 

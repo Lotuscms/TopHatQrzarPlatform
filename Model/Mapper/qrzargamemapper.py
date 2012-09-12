@@ -1,7 +1,6 @@
 import MySQLdb as mdb
 
 from teamgamemapper import TeamGameMapper
-from usermapper import UserMapper
 from deferredcollection import DeferredCollection
 
 class QRzarGameMapper(TeamGameMapper):
@@ -18,12 +17,13 @@ class QRzarGameMapper(TeamGameMapper):
 	def _doCreateObject(self, data):
 		"""Builds the game object given the draw data returned from the database query"""
 		from Model.qrzargame import QRzarGame
+		from Model.deferredobject import DeferredObject
+		from Model.user import User
 
 		game = QRzarGame(data["id"])
 
 		# get creator User object
-		UM = UserMapper()
-		creator = UM.find(data["creator"])
+		creator = DeferredObject(User(data["creator"]))
 		game.setCreator(creator)
 
 		# Build the game type information
