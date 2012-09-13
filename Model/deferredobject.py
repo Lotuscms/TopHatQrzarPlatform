@@ -37,3 +37,6 @@ class DeferredObject:
 			self._obj = self._obj.mapper().find(self._obj.getId())
 
 			self._run = True										# ensure we don't run the query again
+
+	def getObject(self):
+		return self._obj

@@ -35,7 +35,7 @@ class Games(Request):
 					raise BadRequest("Games must be requested by ID")
 
 				if game is not None:
-					return self._response(Depth.build(game, 3), CODE.OK)
+					return self._response(Depth.build(game, self.depth), CODE.OK)
 				else:
 					raise NotFound("There is no game identified by the number %s" % self.arg)
 			
@@ -49,7 +49,7 @@ class Games(Request):
 
 				gameslist = []
 				for game in games:
-					gameslist.append(Depth.build(game, 2))
+					gameslist.append(Depth.build(game, self.depth))
 
 				gamedict = {"games":gameslist, "pagination_offset":offset, "max_perpage": 50}
 
@@ -79,7 +79,7 @@ class Games(Request):
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to create the game in the database (%s)" % e.args[1])
 
-			return self._response(Depth.build(game, 2), CODE.CREATED)
+			return self._response(Depth.build(game, self.depth), CODE.CREATED)
 		else:
 			raise BadRequest("Required params name not sent")
 
@@ -109,7 +109,7 @@ class Games(Request):
 
 				game.setName(dataObject["name"])
 
-				return self._response(Depth.build(game, 3), CODE.CREATED)
+				return self._response(Depth.build(game, self.depth), CODE.CREATED)
 				
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to search the user database (%s)" % e.args[1])
