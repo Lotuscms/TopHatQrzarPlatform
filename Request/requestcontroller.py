@@ -11,11 +11,13 @@ class RequestController:
 	response = None
 	arg = None
 	key = None
+	depth = 0
 
-	def __init__(self, opcode, uri, key, data=None):
+	def __init__(self, opcode, uri, key, data=None, depth=0):
 		self.opcode = opcode
 		self.uri = uri
 		self.key = key
+		self.depth = depth
 
 		self.data = {}
 		if data is not None: 
@@ -33,6 +35,7 @@ class RequestController:
 
 		request.setArg(self.arg)
 		request.setApiKey(self.key)
+		request.setDepth(self.depth)
 
 		if self.opcode is 0:
 			response = request.get()

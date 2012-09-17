@@ -37,7 +37,7 @@ class Players(Request):
 					raise BadRequest("Players must be requested by ID")
 
 				if player is not None:
-					return self._response(Depth.build(player), CODE.OK)
+					return self._response(Depth.build(player, self.depth), CODE.OK)
 				else:
 					raise NotFound("This player does not exist")
 
@@ -51,7 +51,7 @@ class Players(Request):
 
 				playerslist = []
 				for player in playerslist:
-					playerslist.append(Depth.build(player, 2))
+					playerslist.append(Depth.build(player, self.depth))
 
 				playerslist = {"players": playerslist, "pagination_offset": offset, "max_perpage": 50}
 
@@ -93,7 +93,7 @@ class Players(Request):
 
 			QRzarPlayerMapper().insert(player)
 
-			return self._response(Depth.build(player, 2), CODE.CREATED)
+			return self._response(Depth.build(player, self.depth), CODE.CREATED)
 
 		else:
 			raise BadRequest("Required params name, game and qrcode not sent")
@@ -111,8 +111,6 @@ class Players(Request):
 
 					player = PM.find(dataObject["id"])
 
-
-
 					if player is None:
 						raise NotFound("The specified player type does not exist.")
 				else:
@@ -126,20 +124,17 @@ class Players(Request):
 
 					if dataObject.has_key("respawn_code"):
 
-
 						if dataObject["respawn_code"] == player.getTeam().getRespawnCode() or self.user.accessLevel('super_user'):
 							player.setAlive(True)
 
 						else:
 							raise Forbidden("Incorrect respawn QRcode")
 
-
-
 					player.setName(dataObject["name"])
 
 					PM.update(player)
 
-				return self._response(Depth.build(player, 3), CODE.CREATED)
+				return self._response(Depth.build(player, self.depth), CODE.CREATED)
 
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to search the player database (%s)" % e.args[1])

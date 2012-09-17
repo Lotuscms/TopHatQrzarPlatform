@@ -41,7 +41,7 @@ class Users(Request):
 					raise NotFound("This user does not exist")
 
 				if self.user.accessLevel("super_user") or self.user.getId() == user.getId():
-					return self._response(Depth.build(user, 2), CODE.OK)
+					return self._response(Depth.build(user, self.depth), CODE.OK)
 				else:
 					raise Forbidden()
 
@@ -52,7 +52,7 @@ class Users(Request):
 
 					userslist = []
 					for user in users:
-						userslist.append(Depth.build(user, 2))
+						userslist.append(Depth.build(user, self.depth))
 
 					userslist = {"users": userslist, "pagination_offset":offset, "max_perpage": 50}
 
@@ -102,7 +102,7 @@ class Users(Request):
 			except mdb.DatabaseError, e:
 				raise ServerError("Unable to save apitoken in the database (%s)" % e.args[1])
 
-			return self._response(Depth.build(token, 2), CODE.CREATED)	
+			return self._response(Depth.build(token, self.depth), CODE.CREATED)	
 		else:
 			raise BadRequest("Required params email and password not sent")
 
@@ -134,7 +134,7 @@ class Users(Request):
 
 						UserMapper.update(user)
 
-						return self._response(user.dict(), CODE.CREATED)
+						return self._response(Depth.build(user, self.depth), CODE.CREATED)
 					else:
 						raise Forbidden()
 				else:

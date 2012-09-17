@@ -44,7 +44,12 @@ class CherrypyHandler(RESTResource):
         if "apitoken" in params:
           key = params["apitoken"]
 
-        response = self.datahandler.handleIt(0, retval, key, None)
+        if "depth" in params:
+          depth = int(params["depth"])
+        else:
+          depth = 0
+
+        response = self.datahandler.handleIt(0, retval, key, None, depth)
 
         cherrypy.response.status = response.code
         return response.json
@@ -63,7 +68,12 @@ class CherrypyHandler(RESTResource):
         if "apitoken" in params: 
           key = params["apitoken"]
 
-        response = self.datahandler.handleIt(1, retval, key, str(params['data']))
+        if "depth" in params:
+          depth = int(params["depth"])
+        else:
+          depth = 0
+
+        response = self.datahandler.handleIt(1, retval, key, str(params['data']), depth)
 
         cherrypy.response.status = response.code
         return response.json
@@ -74,16 +84,17 @@ class CherrypyHandler(RESTResource):
         if retval is "//":
           retval = "/"
 
-        if 'data' not in params:
-          params['data'] = ""
-
-
         key = None
 
         if "apitoken" in params:
           key = params["apitoken"]
 
-        response = self.datahandler.handleIt(2, retval, key, str(params['data']))
+        if "depth" in params:
+          depth = int(params["depth"])
+        else:
+          depth = 0
+
+        response = self.datahandler.handleIt(2, retval, key, str(params['data']), depth)
 
         cherrypy.response.status = response.code
         return response.json

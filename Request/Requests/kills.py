@@ -39,7 +39,7 @@ class Kills(Request):
 					raise BadRequest("Kill must be requested by ID")
 
 				if kill is not None:
-					return self._response(Depth.build(kill, 0), CODE.OK)
+					return self._response(Depth.build(kill, self.depth), CODE.OK)
 				else:
 					raise NotFound("This kill does not exist")
 			
@@ -49,7 +49,7 @@ class Kills(Request):
 
 				killslist = []
 				for kill in kills:
-					killslist.append(Depth.build(kill, 2))
+					killslist.append(Depth.build(kill, self.depth))
 
 				killdict = {"kills": killslist, "pagination_offset": offset, "max_perpage": 50}
 
@@ -127,7 +127,7 @@ class Kills(Request):
 				raise ServerError("Unable to update the killer in the database (%s)" % e.args[1])
 
 
-			return self._response(Depth.build(kill, 3), CODE.CREATED)
+			return self._response(Depth.build(kill, self.depth), CODE.CREATED)
 		else:
 			raise BadRequest("Killer and victim_qrcode were not submitted")
 
