@@ -101,7 +101,7 @@ class Players(Request):
 	@require_login
 	def _doPut(self, dataObject):
 
-		if  "id" and "name" in dataObject:
+		if  "id" in dataObject:
 			try:
 
 				PM = QRzarPlayerMapper()
@@ -130,7 +130,14 @@ class Players(Request):
 						else:
 							raise Forbidden("Incorrect respawn QRcode")
 
-					player.setName(dataObject["name"])
+					if "name" in dataObject:
+						player.setName(dataObject["name"])
+
+					if "latitude" in dataObject:
+						player.setLat(dataObject["latitude"])
+
+					if "longitude" in dataObject:
+						player.setLon(dataObject["longitude")
 
 					PM.update(player)
 
