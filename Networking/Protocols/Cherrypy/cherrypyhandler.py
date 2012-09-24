@@ -86,6 +86,9 @@ class CherrypyHandler(RESTResource):
 
         key = None
 
+        if 'data' not in params:
+          params['data'] = ""
+
         if "apitoken" in params:
           key = params["apitoken"]
 
