@@ -2,6 +2,7 @@ from datetime import datetime
 from Model.domainobject import DomainObject
 from Model.domainexception import DomainException
 from Model.Mapper.collection import Collection
+from Model.deferredobject import DeferredObject
 
 class Depth:
 
@@ -39,6 +40,9 @@ class Depth:
 
 			elif isinstance(value, DomainObject):							# DomainObject 
 				dic[attr] = Depth.build(value, depth-1)						# recursively build reference objects' dictionaries
+
+			elif isinstance(value, DeferredObject):
+				dic[attr] = Depth.build(value.getObject(), depth-1)
 
 			else:															# Normal (int, str, long, bool)
 				dic[attr] = value

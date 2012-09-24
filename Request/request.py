@@ -15,6 +15,7 @@ class Request:
 	user = None
 	key = None
 	apikey = None
+	depth = 0
 
 	@abstractmethod
 	def __init__(self):
@@ -31,6 +32,9 @@ class Request:
 
 	def delete(self):
 		return self._doDelete()
+
+	def setDepth(self, depth):
+		self.depth = depth
 
 	def setArg(self, arg):
 		self.arg = arg
