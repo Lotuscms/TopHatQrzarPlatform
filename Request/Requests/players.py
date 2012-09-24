@@ -137,7 +137,7 @@ class Players(Request):
 						player.setLat(dataObject["latitude"])
 
 					if "longitude" in dataObject:
-						player.setLon(dataObject["longitude")
+						player.setLon(dataObject["longitude"])
 
 					PM.update(player)
 
