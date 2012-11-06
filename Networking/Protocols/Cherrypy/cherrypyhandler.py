@@ -34,6 +34,7 @@ class CherrypyHandler(RESTResource):
         self.datahandler = DataHandler()
 
     def handle_GET(self, *vpath, **params):
+        print vpath
         retval = "/"+str('/'.join(vpath))+"/"
 
         if retval is "//":
