@@ -2,24 +2,24 @@ from twisted.web.server import Site
 from twisted.web.resource import Resource
 from twisted.internet import reactor
 from Networking.statuscodes import StatusCodes
-from Networking.network import Network
+from Networking.baseprotocol import BaseProtocol
 
-class Networking(Network):
+class Protocol(BaseProtocol):
 
 	_config = None
 
 	def __init__(self, config):
+		super(Protocol, self).__init__(config)
 		self._registerStatusCodes()
-		self._config = config
 
+	def bind(self):
 		from twistedhandler import TwistedHandler
 		root = TwistedHandler(self)
 		factory = Site(root)
 		reactor.listenTCP(self._config.Port, factory)
-		reactor.run()
 
-	def getHandler(self):
-		return self.protocol_handler
+	def loop(self):
+		reactor.run()
 
 	def _registerStatusCodes(self):
 		StatusCodes.NONE = 0
