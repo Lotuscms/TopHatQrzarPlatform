@@ -42,7 +42,7 @@ resources = [
 	('/teamscore/', "TeamScore"),
 	('/teams/', "Teams")
 ]
-from Networking.Protocols.Twisted import Protocol
+from Networking.Protocols.Cherrypy import Protocol
 
 Version='0.1.2'
 GameVersion='0.1'
