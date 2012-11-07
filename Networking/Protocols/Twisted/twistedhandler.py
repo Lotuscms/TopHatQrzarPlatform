@@ -19,9 +19,14 @@ class TwistedHandler(Resource):
         key = None
 
         if "apitoken" in request.args:
-            key = request.args['apitoken']
+            key = str(request.args['apitoken'][0])
 
-        response = self.datahandler.handleIt(0, request.path, key, None)
+        depth = 0
+        
+        if "depth" in request.args:
+            depth = str(request.args['depth'][0])
+
+        response = self.datahandler.handleIt(0, request.path, key, None, depth)
 
         request.setResponseCode(response.code)
         return response.json
@@ -29,16 +34,22 @@ class TwistedHandler(Resource):
     def render_POST(self, request):
         
         try:
-            data = request.args['data'][0]
+            data = str(request.args['data'][0])
         except:
             data = ""
 
         key = None
+        
 
         if "apitoken" in request.args:
-            key = request.args['apitoken']
+            key = str(request.args['apitoken'][0])
 
-        response = self.datahandler.handleIt(1, request.path, key, data)
+        depth = 0
+
+        if "depth" in request.args:
+            depth = str(request.args['depth'][0])
+
+        response = self.datahandler.handleIt(1, request.path, key, data, depth)
 
         request.setResponseCode(response.code)
         return response.json
@@ -46,27 +57,38 @@ class TwistedHandler(Resource):
     def render_PUT(self, request):
 
         try:
-            data = request.args['data'][0]
+            data = str(request.args['data'][0])
         except:
             data = ""
 
         key = None
 
         if "apitoken" in request.args:
-            key = request.args['apitoken']
+            key = str(request.args['apitoken'][0])
 
-        response = self.datahandler.handleIt(2, request.path, key, data)
+        depth = 0
+        
+        if "depth" in request.args:
+            depth = str(request.args['depth'][0])
+
+        response = self.datahandler.handleIt(2, request.path, key, data, depth)
 
         request.setResponseCode(response.code)
         return response.json
 
     def render_DELETE(self, request):
+
         key = None
 
         if "apitoken" in request.args:
-            key = request.args['apitoken']
+            key = str(request.args['apitoken'][0])
 
-        response = self.datahandler.handleIt(3, request.path, key, None)
+        depth = 0
+        
+        if "depth" in request.args:
+            depth = str(request.args['depth'][0])
+
+        response = self.datahandler.handleIt(3, request.path, key, None, depth)
 
         request.setResponseCode(response.code)
         return response.json
