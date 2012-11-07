@@ -17,8 +17,9 @@ class DataHandler:
 		response = None
 		#print data
 		try:
-			if depth > 3:
-				raise AssertionError("Depth cannot be greater than 3")
+			# Max Depth is 5 as mission control requires this level of depth.
+			if depth > 5:
+				raise AssertionError("Depth cannot be greater than 5")
 
 			if opcode is 0:
 				RC = RequestController(opcode, uri, key, None, depth)

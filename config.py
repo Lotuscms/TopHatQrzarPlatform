@@ -39,12 +39,13 @@ resources = [
 	('/kills/', "Kills"),
 	('/players/', "Players"),
 	('/alive/', "Alive"),
-	('/teamscore/', "TeamScore")
+	('/teamscore/', "TeamScore"),
+	('/teams/', "Teams")
 ]
 from Networking.Protocols.Cherrypy import Protocol
 
 Version='0.1.2'
-GameVersion='0.0.2'
+GameVersion='0.1'
 ServerTitle='TopHat QRzar Testing Server'
 
 try:
