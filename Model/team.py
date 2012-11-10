@@ -53,11 +53,14 @@ class Team(DomainObject):
 		self._game = game
 
 	def getPlayers(self):
-		if self._players is None:
-			# load games data
-			from Mapper.qrzarplayermapper import QRzarPlayerMapper
-			PM = QRzarPlayerMapper()
-			self._players = PM.findByTeam(self)
+		#if self._players is None:
+		# load games data
+
+		from Mapper.qrzarplayermapper import QRzarPlayerMapper
+		PM = QRzarPlayerMapper()
+		
+		# Loading them in again as this object is cached, and if cached then new players won't be loaded and shown in the list of players.
+		self._players = PM.findByTeam(self)
 			
 		return self._players
 
@@ -73,9 +76,8 @@ class Team(DomainObject):
 		if not isinstance(player, TeamPlayer):
 			raise DomainException("Can only add Team Player type objects to a team not %s" % str(type(player)))
 
-		player.setTeam(self)
-
 		players = self.getPlayers()			# get players collection
+		player.setTeam(self)
 		players.add(player)					# add to the list of players
 
 	def dict(self):
