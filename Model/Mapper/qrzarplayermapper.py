@@ -49,7 +49,7 @@ class QRzarPlayerMapper(PlayerTeamMapper, PlayerGeolocateMapper):
 			alive = 0
 
 		params = (obj.getName(), obj.getTeam().getId(), obj.getUser().getId(), 
-					obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), obj.getQRCode(), alive)
+					obj.getLat(), obj.getLon(), obj.getScore(), None, obj.getQRCode(), alive)
 
 		# run the query
 		cursor = self.db.getCursor()
@@ -79,7 +79,7 @@ class QRzarPlayerMapper(PlayerTeamMapper, PlayerGeolocateMapper):
 			alive = 0
 
 		params = (obj.getName(), obj.getTeam().getId(), obj.getUser().getId(), 
-				obj.getLat(), obj.getLon(), obj.getScore(), obj.getTime(), alive, obj.getQRCode(), obj.getId())
+				obj.getLat(), obj.getLon(), obj.getScore(), None, alive, obj.getQRCode(), obj.getId())
 
 		# run the query
 		cursor = self.db.getCursor()
