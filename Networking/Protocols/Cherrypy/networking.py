@@ -21,6 +21,7 @@ class Protocol(BaseProtocol):
 		CherryPyConfig.update({'server.socket_host': self._config.Interface, 
                          'server.socket_port': self._config.Port,
                         }) 
+		#super(Protocol,self).bind()
 
 	def _registerStatusCodes(self):
 		StatusCodes.NONE = 0
