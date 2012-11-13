@@ -37,11 +37,8 @@ class Alive(Request):
 
 			rdata = {
 				"alive": player.getAlive(),
-				"score": player.getScore(),
-				"teamscore": player.getTeam().getScore()
+				"score": player.getScore()
 			}
-
-			print str(player.getTeam().dict())
 
 			return self._response(rdata, CODE.OK)
 				
