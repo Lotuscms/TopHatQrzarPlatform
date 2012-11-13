@@ -4,7 +4,6 @@ from Networking.statuscodes import StatusCodes as CODE
 
 from Model.Mapper.qrzarplayermapper import QRzarPlayerMapper
 from Model.player import Player
-from Model.depth import Depth
 import MySQLdb as mdb
 
 # Decorator
