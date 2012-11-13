@@ -15,7 +15,8 @@ class Player(DomainObject):
 	_score = 0			
 	_time = datetime.now()
 	_alive = True 		
-
+	_flashed = datetime.now()
+	_degree = 0
 	def __init__(self, id_=None):
 		super(Player, self).__init__(id_)
 
