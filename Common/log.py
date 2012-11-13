@@ -13,7 +13,8 @@ class LogFile:
 		if  path(self.filename).exists:
 
 			pass
-		else: open(self.filename,'a').close()
+		else: 
+			open(self.filename,'a').close()
 
 		if self.path.size >= 524288: #512KB
 			dirlist = listdir(self.path.realpath.parent.path)
