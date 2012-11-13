@@ -139,6 +139,11 @@ class Players(Request):
 					if "longitude" in dataObject:
 						player.setLon(dataObject["longitude"])
 
+					if "flashed" in dataObject and "degree" in dataObject:
+							player.setFlashed(dataObject["flashed"], dataObject["degree"])
+
+
+
 					PM.update(player)
 
 				return self._response(Depth.build(player, self.depth), CODE.CREATED)
