@@ -42,7 +42,30 @@ class Player(DomainObject):
 			raise DomainException("Score must be between -99999 and +99999")
 
 		self._score = score
+	def setFlashed(self, flashed, degree):
+			try:
+					flashed = datetime(flashed)
+			except ValueError:
+					raise DomainException("flashed must a timestamp")
 
+			try:
+					degree = int(degree)
+			except ValueError:
+					raise DomainException("degree must be an integer")
+
+			if degree > 100 or degree < 0:
+					raise DomainException("degree must be between 0 and 100")
+			self._flashed=flashed
+			self._degree = degree
+
+
+
+	def getFlashed(self):
+			return self._flashed
+
+	def getDegree(self):
+			return self._degree
+	
 	def getScore(self):
 		return self._score
 
