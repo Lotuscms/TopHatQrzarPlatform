@@ -45,7 +45,7 @@ class Teams(Request):
 	@require_login
 	def _doPost(self, dataObject):
 
-		if "name" in dataObject and "game" in dataObject and "id" in dataObject["game"] and "respawn_code" in dataObject and "reference_code" in dataObject:	
+		if "name" in dataObject and "game" in dataObject and "respawn_code" in dataObject and "reference_code" in dataObject:	
 			TM = TeamMapper()
 
 			team = Team()
