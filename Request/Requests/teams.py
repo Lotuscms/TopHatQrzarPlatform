@@ -45,11 +45,7 @@ class Teams(Request):
 	@require_login
 	def _doPost(self, dataObject):
 
-		# The game creation should have no arguments.
-		if self.arg is not None:
-			return self._response({}, CODE.UNIMPLEMENTED)
-
-		if "name" in dataObject and "game" in dataObject and "id" in dataObject["game"] and "respawn_code" in dataObject and "reference_code" in dataObject and "color" in dataObject:	
+		if "name" in dataObject and "game" in dataObject and "id" in dataObject["game"] and "respawn_code" in dataObject and "reference_code" in dataObject:	
 			TM = TeamMapper()
 
 			team = Team()
