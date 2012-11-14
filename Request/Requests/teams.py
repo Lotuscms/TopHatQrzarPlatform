@@ -5,7 +5,9 @@ from Model.authentication import require_login
 from Model.depth import Depth
 from Model.Mapper.usermapper import UserMapper
 from Model.Mapper.teammapper import TeamMapper
+from Model.Mapper.qrzargamemapper import QRzarGameMapper as GameMapper
 from Model.qrzargame import QRzarGame
+from Model.team import Team
 import MySQLdb as mdb
 
 class Teams(Request):
@@ -39,3 +41,38 @@ class Teams(Request):
 
 		except mdb.DatabaseError, e:
 			raise ServerError("Unable to search the game database (%s: %s)" % e.args[0], e.args[1])
+
+	@require_login
+	def _doPost(self, dataObject):
+
+		# The game creation should have no arguments.
+		if self.arg is not None:
+			return self._response({}, CODE.UNIMPLEMENTED)
+
+		if "name" in dataObject and "game" in dataObject and "id" in dataObject["game"] and "respawn_code" in dataObject and "reference_code" in dataObject and "color" in dataObject:	
+			TM = TeamMapper()
+
+			team = Team()
+
+			try:
+				game = GameMapper().find(dataObject["game"]["id"])
+
+				if game is None:
+					raise NotFound("The specified game id was not found on the server.")
+
+				team.setGame(game)
+			except mdb.DatabaseError, e:
+				raise ServerError("Unable to search the teams or players database (%s)" % e.args[1])
+
+			team.setName(dataObject["name"])
+			team.setRespawnCode(dataObject["respawn_code"])
+			team.setReferenceCode(dataObject["reference_code"])
+
+			try:
+				TM.insert(team)			
+			except mdb.DatabaseError, e:
+				raise ServerError("Unable to create the team in the database (%s)" % e.args[1])
+
+			return self._response(Depth.build(team, self.depth), CODE.CREATED)
+		else:
+			raise BadRequest("Required params not sent")

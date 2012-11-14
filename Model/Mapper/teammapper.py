@@ -35,7 +35,7 @@ class TeamMapper(Mapp):
 	def _doInsert(self, obj):
 		# build query
 		# id, name, game_id
-		query = "INSERT INTO teams VALUES(NULL, %s, %s, %s, %s)"
+		query = "INSERT INTO teams VALUES(NULL, %s, %s, %s, %s, NULL)"
 
 		# convert boolean value to int bool
 		params = (obj.getName(), obj.getGame().getId(), obj.getReferenceCode(), obj.getRespawnCode())
