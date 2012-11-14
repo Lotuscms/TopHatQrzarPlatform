@@ -71,12 +71,12 @@ class TeamMapper(Mapp):
 		else:
 			return False
 
-	def getByGame(self, game, start=0, number=50):
+	def getByGame(self, game, start=0, number=500):
 		if start < 0:
 			raise mdb.ProgrammingError("The start point must be a positive int")
 
-		if number > 50:
-			raise mdb.ProgrammingError("You cannot select more than 50 rows at one time")
+		if number > 500:
+			raise mdb.ProgrammingError("You cannot select more than 500 rows at one time")
 
 		query = "SELECT * FROM teams WHERE game_id = %s LIMIT %s, %s"
 		params = (game.getId(), start, start+number)
