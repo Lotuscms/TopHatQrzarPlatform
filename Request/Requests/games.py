@@ -8,6 +8,8 @@ from Model.Mapper.qrzargamemapper import QRzarGameMapper
 from Model.qrzargame import QRzarGame
 import MySQLdb as mdb
 
+from datetime import datetime
+
 class Games(Request):
 
 	''' 
@@ -72,6 +74,14 @@ class Games(Request):
 			game = QRzarGame()
 
 			game.setName(dataObject["name"])
+
+			if "start_time" in dataObject:
+				#Format 2012-11-07 12:53:51
+				game.setStartTime(datetime.strptime(dataObject["start_time"], "%Y-%m-%d %H:%M:%S"))
+
+			if "end_time" in dataObject:
+				game.setEndTime(datetime.strptime(dataObject["end_time"], "%Y-%m-%d %H:%M:%S"))
+
 			game.setCreator(self.user)
 
 			try:
