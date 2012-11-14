@@ -56,6 +56,7 @@ class Mapp:
 		"""Turns results from the database into objects that the rest of the application understands"""
 		# Check if we have made this object before - no need to make it twice
 		old = self.getFromWatcher(data["id"])
+
 		if old is not None:
 			return old
 
@@ -70,14 +71,14 @@ class Mapp:
 
 		return obj
 
-	def _findMany(self, query, start=0, number=50):
+	def _findMany(self, query, start=0, number=500):
 		"""Stock stuff for finding multiple records at the same time limited by the limit factors"""
 		# check that the limit params are not off the wall
 		if start < 0:
 			raise mdb.ProgrammingError("The start point must be a positive int")
 
-		if number > 50:
-			raise mdb.ProgrammingError("You cannot select more than 50 rows at one time")
+		if number > 500:
+			raise mdb.ProgrammingError("You cannot select more than 500 rows at one time")
 
 		# run the qurery
 		params = (start, start + number)
@@ -91,7 +92,7 @@ class Mapp:
 		else:
 			return None
 
-	def findAll(self, start=0, number=50):
+	def findAll(self, start=0, number=500):
 		"""Finds all the objects in such a table from start to (start + number)"""
 		# build the query
 		query = "SELECT * FROM " + self.tableName() + " LIMIT %s, %s"
@@ -152,7 +153,7 @@ class Mapp:
 
 		return result
 
-	def selectIdentity(self, identityObj, limitStart=0, limitDistance=50):
+	def selectIdentity(self, identityObj, limitStart=0, limitDistance=500):
 		"""Builds a dynamic query using the identityObject to collect the parameters"""
 
 		# check we get an instance of identityObject
@@ -163,8 +164,8 @@ class Mapp:
 		if limitStart < 0:
 			raise mdb.ProgrammingError("The start point must be a positive int")
 
-		if limitDistance > 50:
-			raise mdb.ProgrammingError("You cannot select more than 50 rows at one time")
+		if limitDistance > 500:
+			raise mdb.ProgrammingError("You cannot select more than 500 rows at one time")
 
 		if limitDistance < 1:
 			raise mdb.ProgrammingError("You must select at least one row")
