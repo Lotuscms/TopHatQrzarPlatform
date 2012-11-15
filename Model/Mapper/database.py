@@ -21,6 +21,7 @@ class Database:
 		
 		try:
 			self.__con = mdb.connect(host=self.__hostname, user=self.__user, passwd=self.__password, db=self.__dbname, use_unicode=True, charset="utf8")
+			self.__con.autocommit(True)
 
 		except mdb.Error, e:
 			raise mdb.OperationalError("Database Error: %d: %s" % (e.args[0], e.args[1]))

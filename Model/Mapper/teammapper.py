@@ -37,11 +37,14 @@ class TeamMapper(Mapp):
 		# id, name, game_id
 		query = "INSERT INTO teams VALUES(NULL, %s, %s, %s, %s, NULL)"
 
+
 		# convert boolean value to int bool
 		params = (obj.getName(), obj.getGame().getId(), obj.getReferenceCode(), obj.getRespawnCode())
 
+
 		# run the query
 		cursor = self.db.getCursor()
+
 		rowsAffected = cursor.execute(query, params)
 
 		# get insert id
