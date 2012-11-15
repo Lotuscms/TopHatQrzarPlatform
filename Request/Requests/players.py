@@ -89,6 +89,8 @@ class Players(Request):
 			player.setName(dataObject["name"])
 			player.setQRCode(qr_code)
 			player.setUser(self.user)
+			player.setLon(0.0)
+			player.setLat(0.0)
 			team.addPlayer(player)
 
 			QRzarPlayerMapper().insert(player)
@@ -119,7 +121,6 @@ class Players(Request):
 				player_user_id= player.getUser().getId()
 				authenticated_user_id = self.user.getId()
 
-
  				if player_user_id == authenticated_user_id or self.user.accessLevel('super_user'):
 
 					if dataObject.has_key("respawn_code"):
@@ -141,8 +142,6 @@ class Players(Request):
 
 					if "flashed" in dataObject and "degree" in dataObject:
 							player.setFlashed(dataObject["flashed"], dataObject["degree"])
-
-
 
 					PM.update(player)
 

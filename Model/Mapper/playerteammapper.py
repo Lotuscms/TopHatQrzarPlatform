@@ -9,11 +9,11 @@ class PlayerTeamMapper(PlayerMapper):
 	def __init__(self):
 		super(PlayerTeamMapper, self).__init__()
 
-	def findByTeam(self, team, start=0, number=50):
+	def findByTeam(self, team, start=0, number=500):
 		if start < 0:
 			raise mdb.ProgrammingError("The start point must be a positive int")
 
-		if number > 50:
+		if number > 500:
 			raise mdb.ProgrammingError("You cannot select more than 50 rows at one time")
 
 		query = "SELECT * FROM players WHERE team_id = %s LIMIT %s, %s"
