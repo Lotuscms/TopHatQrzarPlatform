@@ -100,6 +100,9 @@ class Kills(Request):
 			if victim.getAlive() is False:
 				raise Conflict("Victim is already dead, let him rest!")
 			
+			if killer.getTeam().getId() == victim.getTeam().getId():
+					killer.decrementScore()
+			
 			kill = Kill()
 			kill.setKiller(killer)
 			kill.setVictim(victim)
