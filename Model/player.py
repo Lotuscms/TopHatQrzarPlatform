@@ -50,6 +50,8 @@ class Player(DomainObject):
 			raise DomainException("Score must be between -99999 and +99999")
 
 		self._score = score
+
+	# This Flashed method needs to be removed from the core player class to the qrzarplayer.
 	def setFlashed(self, flashed, degree):
 			try:
 					flashed = datetime(flashed)
@@ -65,8 +67,6 @@ class Player(DomainObject):
 					raise DomainException("degree must be between 0 and 100")
 			self._flashed=flashed
 			self._degree = degree
-
-
 
 	def getFlashed(self):
 			return self._flashed
