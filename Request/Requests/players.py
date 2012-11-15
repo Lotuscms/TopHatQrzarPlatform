@@ -89,8 +89,6 @@ class Players(Request):
 			player.setName(dataObject["name"])
 			player.setQRCode(qr_code)
 			player.setUser(self.user)
-			# Weird alive not showing bug can be stopped via this
-			player.setAlive(True)
 			team.addPlayer(player)
 
 			QRzarPlayerMapper().insert(player)

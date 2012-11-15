@@ -17,8 +17,15 @@ class Player(DomainObject):
 	_alive = True 		
 	_flashed = datetime.now()
 	_degree = 0
+
 	def __init__(self, id_=None):
 		super(Player, self).__init__(id_)
+
+		self._score = 0
+		self._alive = True
+		self._time = datetime.now()
+		self._flashed = datetime.now()
+
 
 	# Setters #
 	def setName(self, name):
