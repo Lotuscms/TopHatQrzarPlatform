@@ -37,6 +37,10 @@ class Games(Request):
 					raise BadRequest("Games must be requested by ID")
 
 				if game is not None:
+
+					# Load in the Teams
+					game.getTeams()
+
 					return self._response(Depth.build(game, self.depth), CODE.OK)
 				else:
 					raise NotFound("There is no game identified by the number %s" % self.arg)
