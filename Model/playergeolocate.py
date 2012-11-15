@@ -21,7 +21,14 @@ class PlayerGeoLocate(Player):
 		self._lon = lon
 
 	def getLat(self):
-		return self._lat
+
+		if self._lat is None:
+			return 0.0
+		else:
+			return self._lat
 
 	def getLon(self):
-		return self._lon
+		if self._lon is None:
+			return 0.0
+		else:
+			return self._lon
