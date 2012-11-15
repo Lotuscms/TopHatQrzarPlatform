@@ -9,12 +9,12 @@ class PlayerTeamlessMapper(PlayerMapper):
 	def __init__(self):
 		super(PlayerTeamlessMapper, self).__init__()
 
-	def getPlayersInGame(self, game, start=0, number=50):
+	def getPlayersInGame(self, game, start=0, number=500):
 		# check func params
 		if start < 0:
 			raise mdb.ProgrammingError("Start point must be a postive int")
 
-		if number > 50:
+		if number > 500:
 			raise mdb.ProgrammingError("Cannot select more than 50 rows at once")
 
 		# build the query
