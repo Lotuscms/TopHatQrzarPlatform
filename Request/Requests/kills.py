@@ -62,7 +62,6 @@ class Kills(Request):
 
 	@require_login
 	def _doPost(self, dataObject):
-		print str(dataObject)
 		if "killer" and "victim_qrcode" in dataObject:
 			KM = KillMapper()
 			PM = QRzarPlayerMapper()
