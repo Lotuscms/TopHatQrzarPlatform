@@ -22,7 +22,7 @@ class User(DomainObject):
 	def __init__(self, id_=None):
 		super(User, self).__init__(id_)
 
-		#For some reason we are having errors due to the games variable.
+		# For some reason we are having errors due to the games variable.
 		self._games = None
 
 	def __str__(self):
