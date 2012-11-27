@@ -14,14 +14,27 @@ class PlayerGeoLocate(Player):
 
 	def setLat(self, lat):
 		# type checking required
-		self._lat = lat
+		if lat is None:
+			self._lat = 0.0
+		else:
+			self._lat = lat
 
 	def setLon(self, lon):
 		# type checking required
-		self._lon = lon
+		if lon is None:
+			self._lon = 0.0
+		else:
+			self._lon = lon
 
 	def getLat(self):
-		return self._lat
+
+		if self._lat is None:
+			return 0.0
+		else:
+			return self._lat
 
 	def getLon(self):
-		return self._lon
+		if self._lon is None:
+			return 0.0
+		else:
+			return self._lon
