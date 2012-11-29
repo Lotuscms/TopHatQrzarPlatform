@@ -31,6 +31,8 @@ class Database:
 		if self.__con is not None:
 			# close the connection
 			self.__con.close()
+	def __del__(self):
+			self.__close()
 
 	def getCursor(self):
 		"""Returns the cursor handler to the database with the setting of data being returned as an assocative array on"""
