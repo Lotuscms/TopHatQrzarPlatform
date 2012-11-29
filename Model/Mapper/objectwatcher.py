@@ -10,7 +10,7 @@ class ObjectWatcher:
 	__delete = []						# list of objects to be deleted
 	
 	def __init__(self):
-		pass
+		self.__objects = {}
 
 	# make it a singleton class	
 	def __new__(cls, *args, **kwargs):
