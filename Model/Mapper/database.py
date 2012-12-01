@@ -28,16 +28,20 @@ class Database:
 			
 	def __close(self):
 		"""Closes the connection to the database if it still exists"""
-		if self.__con is not None:
+		if self.__con is not None and self.__con.open:
 			# close the connection
 			self.__con.close()
-	def __del__(self):
-			self.__close()
+			self.__con = None
+			gc.collect()
+
+	def forceClose(self):
+		self.__close()
 
 	def getCursor(self):
 		"""Returns the cursor handler to the database with the setting of data being returned as an assocative array on"""
 		# now that we need a connection ask for one
-		self.__connect()
+		if self.__con is None:
+			self.__connect()
 
 		# give them their access cursor back
 		return self.__con.cursor(cursorclass=mdb.cursors.DictCursor)

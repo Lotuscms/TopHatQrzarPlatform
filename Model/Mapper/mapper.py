@@ -1,4 +1,4 @@
-import abc
+import abc, gc
 import MySQLdb as mdb
 from Common.config import TopHatConfig
 
@@ -104,7 +104,7 @@ class Mapp:
 		cursor = self.db.getCursor()
 		rowsAffected = cursor.execute(query, params)
 		cursor.close()
-		del self.db
+
 		if rowsAffected > 0:
 			return True
 		else:

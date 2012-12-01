@@ -20,5 +20,6 @@ class DeferredCollection(Collection):
 			self._total = cursor.execute(self._query, self._params)
 			self._raw = cursor.fetchall()					# fetch all the data from the database
 			cursor.close()
+			self._mapper.db.forceClose()
 
 		self._run = True										# ensure we don't run the query again
